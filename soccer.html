@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>N57_CLOCK_MVC</title>
+    <link rel="stylesheet" href="soccer.css" type="text/css">
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item Menu"><input type="button" value="Rules"/></div>
+        <div class="grid-item Menu"><input type="button" value="New Game"/></div>
+        <div class="grid-item Menu"><input type="button" value="Sound"/></div>
+        <div class="grid-item Menu"><input type="button" value="Record Table"/></div>
+        <div class="grid-item Menu"><span>Score:</span></div>
+        <div class="grid-item Menu Score">
+            <span>Player&nbsp;</span><span id="playerScore">0</span>
+            <span>&colon;</span>
+            <span id="computerScore">0</span><span>&nbsp;Computer</span>
+        </div>
+        <div class="grid-item Field">
+            <canvas id="container" width="1850" height="800"></canvas>
+        </div>
+    </div>
+    <script src="field.js"></script>
+</body>
+</html>
