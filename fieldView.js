@@ -51,13 +51,13 @@ class FieldView { /* View start */
 
         // создание градиента для области вытоптанной вратарем
         var gradient = this.ctx.createRadialGradient(
-            this.targetX + this.targetLength/2, this.targetLineY + this.targetGap/2, 10*this.zoom, // 10 радиус внутрееннго круга
-            this.targetX + this.targetLength/2, this.targetLineY + this.targetGap/2, 35*this.zoom // 35 радиус внешнего круга
+            this.targetX + this.targetLength/2, this.targetLineY + this.targetGap/3, 10*this.zoom, // 10 радиус внутрееннго круга
+            this.targetX + this.targetLength/2, this.targetLineY + this.targetGap/3, 45*this.zoom // 35 радиус внешнего круга
         );
         gradient.addColorStop(0.1, 'darkolivegreen');// цвет внутрееннго круга
         gradient.addColorStop(1, 'seagreen');// цвет внешнего круга
         this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(this.targetX + this.targetLength/2.5, this.targetLineY + this.targetLineWidth,
+        this.ctx.fillRect(this.targetX + this.targetLength/2.5, this.targetLineY + this.targetLineWidth/2,
             this.targetGap, this.targetGap/1.25);
     }
 

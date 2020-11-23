@@ -8,8 +8,8 @@ fieldController.start();
 //fieldController.model.goalStage();
 //fieldController.model.stopGoalStage();
 
-var playerView = new PlayerView(container);
-var playerModel = new PlayerModel(playerView);
-var playerController = new PlayerController(playerModel, playerView);
+var goalKeeperView = new PlayerView(container, "goalKeeper");
+var goalKeeperModel = new PlayerModel(goalKeeperView, "goalKeeper");
+var goalKeeperController = new PlayerController(goalKeeperModel, goalKeeperView);
 
-playerController.start();
+goalKeeperController.start();

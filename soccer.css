@@ -25,5 +25,11 @@ input[type="button"] {
 }
 .Score {
     white-space: nowrap;
-    color: steelblue;
+    color: ghostwhite;
+    color: yellow;
+    color: yellowgreen;
+    color:greenyellow;
+    color: darkblue;
+    color: mediumblue;
+    color: midnightblue;
 }
