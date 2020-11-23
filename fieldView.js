@@ -3,7 +3,6 @@
 class FieldView { /* View start */
     constructor(container) {
         this.container = container;
-        this.containerID = this.container.getAttribute("id");
         this.ctx = this.container.getContext('2d');
         this.zoom = 1; // для +/- разрешения экрана
         this.goalLineStartX = 0; // линия ворот с началом у левого края поля
@@ -17,10 +16,12 @@ class FieldView { /* View start */
         this.targetLineWidth = 12*this.zoom;// ширина линий ворот для использования в canvas
         this.targetInternalGapX = 20;//внутренний отступ от штанги до видимого горизонтального края сетки по X
         this.targetInternalGapY = 50;//внутренний отступ от штанги до видимого горизонтального края сетки по Y
-        this.interval = null; // используется для анимации сетки
         this.cellRadius = 20 * this.zoom/2;
         this.cellStep = 20 * this.zoom;
         this.ctx.lineCap = "round";
+        this.gridColor_1 = "darkgray";
+        this.gridColor_2 = "lightgray";
+        this.shift = 1;
         /* configuration end */
     }
 
@@ -75,18 +76,18 @@ class FieldView { /* View start */
         this.ctx.stroke();
     }
 
-    drawGrid = function(color = 'darkgray', color_2 = 'lightgray', shift_1 = 1) {
+    drawGrid = function(color = this.gridColor_1, color_2 = this.gridColor_2, shift = this.shift) {
         this.ctx.lineWidth = 2;
         this.ctx.strokeStyle = color;
         var leftStartPointX = this.targetX + this.zoom * this.targetInternalGapX;
         var bottomStartPointY = this.goalLineY - this.zoom * this.targetInternalGapY;
-        var cellStep = this.cellStep * shift_1;
+        var cellStep = this.cellStep * shift;
 
         // цикл ниже наносит вертикальные линии
-        for (var i = 0; i < this.targetLength - this.targetInternalGapX; i += cellStep) {
+        for (var k = 0; k < this.targetLength - this.targetInternalGapX; k += cellStep) {
             this.ctx.beginPath();
-            this.ctx.moveTo(leftStartPointX + i, bottomStartPointY);
-            this.ctx.lineTo(leftStartPointX + i, this.goalLineY - this.targetHeight);
+            this.ctx.moveTo(leftStartPointX + k, bottomStartPointY);
+            this.ctx.lineTo(leftStartPointX + k, this.goalLineY - this.targetHeight);
             this.ctx.stroke();
         }
         // // цикл ниже наносит горизонтальные соединения
@@ -103,29 +104,32 @@ class FieldView { /* View start */
         }
     }
 
-    drawFieldShakeGrid = function(color, color_2, shift_1) {
+    drawFieldShakeGrid = function() {
         this.ctx.clearRect(0, 0, this.container.getAttribute("width"), this.container.getAttribute("height"));
         var self = this;
-        if (shift_1 === 1) shift_1 = 1.2;
-        else shift_1 = 1;
-        self.drawGrid(color, color_2, shift_1);
+        if (self.gridColor_1 === "darkgray") { /* цвет линий сетки меняется между собой для эфекта движения */
+            self.gridColor_1 = self.gridColor_2;
+            self.gridColor_2 = "darkgray";
+            self.shift = 1.2;
+        }
+        else {
+            self.gridColor_2 = self.gridColor_1;
+            self.gridColor_1 = "darkgray";
+            self.shift = 1;
+        }
+        self.drawGrid(self.gridColor_1, self.gridColor_2, self.shift);
         self.drawFieldEdge();
         self.drawGoalKeeperArea();
         self.drawPenaltyPoint();
         self.drawTarget();
-        self.interval = setInterval(() => { self.drawFieldShakeGrid(color_2, color, shift_1);}, 250);
-        /* цвет линий сетки меняется между собой для эфекта движения */
     }
 
     drawField = function() {
-        this.drawFieldEdge();
-        this.drawGoalKeeperArea();
-        this.drawPenaltyPoint();
-        this.drawGrid();
-        this.drawTarget();
+        var self = this;
+        self.drawFieldEdge();
+        self.drawGoalKeeperArea();
+        self.drawPenaltyPoint();
+        self.drawGrid();
+        self.drawTarget();
     }
 }
-
-var fieldView = new FieldView(document.getElementById("container"));
-fieldView.drawFieldShakeGrid('darkgray', 'white', 1.2, 1);
-//fieldView.drawField();

@@ -8,7 +8,6 @@ class FieldController {
     }
 
     start = function() {
-        this.view.drawField();
-        console.log(this.model);
+        this.model.start();
     }
 }/* Controller end */
