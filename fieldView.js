@@ -22,7 +22,6 @@ class FieldView { /* View start */
         this.gridColor_1 = "darkgray";
         this.gridColor_2 = "lightgray";
         this.shift = 1;
-        /* configuration end */
     }
 
     drawFieldEdge = function() { // разметка поля
@@ -45,6 +44,17 @@ class FieldView { /* View start */
         this.ctx.lineTo(this.targetX + this.targetLength + this.zoom * 2 * this.targetGap, this.goalLineY + this.targetGap);
         this.ctx.lineTo(this.targetX + this.targetLength + this.targetGap, this.goalLineY);
         this.ctx.stroke();
+
+        // создание градиента для области вытоптанной вратарем
+        var gradient = this.ctx.createRadialGradient(
+            this.targetX + this.targetLength/2, this.goalLineY + this.targetGap/2, 10*this.zoom, // 10 радиус внутрееннго круга
+            this.targetX + this.targetLength/2, this.goalLineY + this.targetGap/2, 35*this.zoom // 35 радиус внешнего круга
+        );
+        gradient.addColorStop(0.1, 'darkolivegreen');// цвет внутрееннго круга
+        gradient.addColorStop(1, 'seagreen');// цвет внешнего круга
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(this.targetX + this.targetLength/2.5*this.zoom, this.goalLineY + this.targetLineWidth,
+            this.targetGap, this.targetGap/1.25*this.zoom);
     }
 
     drawPenaltyPoint = function() { // 11-метровая отметка
@@ -60,12 +70,12 @@ class FieldView { /* View start */
         this.ctx.lineWidth = this.targetLineWidth;
         this.ctx.strokeStyle = 'azure';
 
-        var linearGradient = this.ctx.createLinearGradient(this.targetX, this.goalLineY - 3 * this.zoom,
+        var gradient = this.ctx.createLinearGradient(this.targetX, this.goalLineY - 3 * this.zoom,
             this.targetX + this.targetLineWidth, this.goalLineY - this.targetHeight);
-        linearGradient.addColorStop(0, 'darkgray');
-        linearGradient.addColorStop(0.5, 'white');
-        linearGradient.addColorStop(1, 'azure');
-        this.ctx.strokeStyle = linearGradient;
+        gradient.addColorStop(0, 'darkgray');
+        gradient.addColorStop(0.5, 'white');
+        gradient.addColorStop(1, 'azure');
+        this.ctx.strokeStyle = gradient;
 
         this.ctx.beginPath();
         this.ctx.moveTo(this.targetX, this.goalLineY - 3 * this.zoom);// 3 = закругления стоек ворот
@@ -77,6 +87,7 @@ class FieldView { /* View start */
         this.ctx.lineTo(this.targetX + this.targetLength, this.goalLineY - this.targetHeight);//правая стойка
         this.ctx.stroke();
 
+        // создание градиента для цвета стоек и перекладины ворот
         var linearGradient_2 = this.ctx.createLinearGradient(this.targetX,
             this.goalLineY - this.targetHeight + this.targetLineWidth,
             this.targetX + this.targetLineWidth, this.goalLineY - this.targetHeight-this.targetLineWidth);
