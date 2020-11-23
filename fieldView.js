@@ -13,11 +13,11 @@ class FieldView { /* View start */
         this.targetGap = 100*this.zoom; // отступ от штанги до боковой линии вратарской площади
         this.fieldWidth = 1840*this.zoom; // ширина видимой части поля
         this.fieldLineWidth = 5*this.zoom; // ширина линий разметки поля для использования в canvas
-        this.targetLineWidth = 12*this.zoom;// ширина линий ворот для использования в canvas
+        this.targetLineWidth = 14*this.zoom;// ширина линий ворот для использования в canvas
         this.targetInternalGapX = 20;//внутренний отступ от штанги до видимого горизонтального края сетки по X
         this.targetInternalGapY = 50;//внутренний отступ от штанги до видимого горизонтального края сетки по Y
-        this.cellRadius = 20 * this.zoom/2;
-        this.cellStep = 20 * this.zoom;
+        this.cellRadius = 20 * this.zoom/2; // радиус ячейки в сетке ворот
+        this.cellStep = 20 * this.zoom; // длина ячейки в сетке ворот
         this.ctx.lineCap = "round";
         this.gridColor_1 = "darkgray";
         this.gridColor_2 = "lightgray";
@@ -53,26 +53,41 @@ class FieldView { /* View start */
         this.ctx.strokeStyle = 'white';
         this.ctx.beginPath();
         this.ctx.ellipse(800, 600, 10, 5, 0, 0, 2 * Math.PI);
-        this.ctx.stroke();
         this.ctx.fill();
     }
 
     drawTarget = function() {
         this.ctx.lineWidth = this.targetLineWidth;
         this.ctx.strokeStyle = 'azure';
+
+        var linearGradient = this.ctx.createLinearGradient(this.targetX, this.goalLineY - 3 * this.zoom,
+            this.targetX + this.targetLineWidth, this.goalLineY - this.targetHeight);
+        linearGradient.addColorStop(0, 'darkgray');
+        linearGradient.addColorStop(0.5, 'white');
+        linearGradient.addColorStop(1, 'azure');
+        this.ctx.strokeStyle = linearGradient;
+
         this.ctx.beginPath();
         this.ctx.moveTo(this.targetX, this.goalLineY - 3 * this.zoom);// 3 = закругления стоек ворот
         this.ctx.lineTo(this.targetX, this.goalLineY - this.targetHeight); //левая стойка
         this.ctx.stroke();
 
         this.ctx.beginPath();
-        this.ctx.moveTo(this.targetX, this.goalLineY - this.targetHeight);
-        this.ctx.lineTo(this.targetX + this.targetLength, this.goalLineY - this.targetHeight) // перекладина
-        this.ctx.stroke();
-
-        this.ctx.beginPath();
         this.ctx.moveTo(this.targetX + this.targetLength, this.goalLineY - 3 * this.zoom );// 3 = закругления стоек ворот
         this.ctx.lineTo(this.targetX + this.targetLength, this.goalLineY - this.targetHeight);//правая стойка
+        this.ctx.stroke();
+
+        var linearGradient_2 = this.ctx.createLinearGradient(this.targetX,
+            this.goalLineY - this.targetHeight + this.targetLineWidth,
+            this.targetX + this.targetLineWidth, this.goalLineY - this.targetHeight-this.targetLineWidth);
+        linearGradient_2.addColorStop(0, 'white');
+        linearGradient_2.addColorStop(0.5, 'whitesmoke');
+        linearGradient_2.addColorStop(1, 'azure');
+        this.ctx.strokeStyle = linearGradient_2;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.targetX, this.goalLineY - this.targetHeight);
+        this.ctx.lineTo(this.targetX + this.targetLength, this.goalLineY - this.targetHeight) // перекладина
         this.ctx.stroke();
     }
 
@@ -90,8 +105,11 @@ class FieldView { /* View start */
             this.ctx.lineTo(leftStartPointX + k, this.goalLineY - this.targetHeight);
             this.ctx.stroke();
         }
-        // // цикл ниже наносит горизонтальные соединения
-        for (var i = -cellStep; i < this.targetLength - this.targetInternalGapX - cellStep; i += cellStep) {
+        // цикл ниже наносит горизонтальные соединения
+        var gap;// расстояние между правой штангой и первой вертикальной линией сетки слева от штанги
+        if (shift === 1) gap = cellStep;
+        else gap = 0;
+        for (var i = -cellStep; i < this.targetLength - this.targetInternalGapX -cellStep + gap; i += cellStep) {
             for (var j = 0; j < this.targetHeight - this.targetInternalGapY; j += cellStep) {
                 this.ctx.beginPath();
                 this.ctx.strokeStyle = color_2;

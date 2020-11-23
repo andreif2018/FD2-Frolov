@@ -19,7 +19,7 @@ class FieldModel { /* Model start */
         setTimeout(() => {
             clearInterval(self.interval);
             self.start();
-        }, 5000);
+        }, 3000);
     }
 
     stopGoalStage = function () {
