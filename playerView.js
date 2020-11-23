@@ -25,12 +25,19 @@ class PlayerView { /* View start */
 
         this.role = role;
         this.legWidth = 20 * this.zoom;
-        this.legHeigth = 60 * this.zoom;
+        this.legHeight = 60 * this.zoom;
         this.bodyWidth = 40 * this.zoom;
-        this.bodyHeigth = 50 * this.zoom;
+        this.bodyHeight = 50 * this.zoom;
         this.bodyX = this.targetX + this.targetLength/2 - this.bodyWidth/2; //центр ворот
-        this.bodyY = this.targetLineY - this.legHeigth - this.bodyHeigth;
-        this.color = 'orange';
+        this.bodyY = this.targetLineY - this.legHeight - this.bodyHeight;
+        this.neckWidth = 15*this.zoom;
+        this.neckHeight = 5*this.zoom;
+        this.neckX = this.bodyX + this.bodyWidth/2;
+        this.neckY = this.bodyY - this.neckHeight;
+        this.headWidth = 25*this.zoom;
+        this.headHeight = 10*this.zoom;
+        this.headX = this.bodyX + this.bodyWidth/2;
+        this.headY = this.neckY - this.headHeight;
     }
 
     drawRoundedRect = function(x , y, width, height, radius, color) {
@@ -49,15 +56,53 @@ class PlayerView { /* View start */
     }
 
     drawBody = function(color) {
-        this.drawRoundedRect(this.bodyX, this.bodyY, this.bodyWidth, this.bodyHeigth, 10*this.zoom, color); //10-radius закругления плечей
+        this.drawRoundedRect(this.bodyX, this.bodyY, this.bodyWidth, this.bodyHeight, 15*this.zoom, color); //10-radius закругления плечей
         var gradient = this.ctx.createRadialGradient(
             this.bodyX+20, this.bodyY+20, 5*this.zoom, // 5 - радиус внутрееннго круга
                 this.bodyX, this.bodyY, 10*this.zoom // 10-радиус внешнего круга
             );
-            gradient.addColorStop(0.75, 'darkkhaki');// цвет узора на футболке
-            gradient.addColorStop(1, color);// цвет футболки
-            this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(this.bodyX + 10*this.zoom, this.bodyY, this.bodyWidth, this.bodyHeigth);//10-radius закругления плечей
+        gradient.addColorStop(0.75, '#F08A37');// цвет узора на футболке
+        gradient.addColorStop(1, color);// цвет футболки
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(this.bodyX + 10*this.zoom, this.bodyY, this.bodyWidth, this.bodyHeight);//10-radius закругления плечей
+    }
+
+    drawNeck = function() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.neckX, this.neckY);
+        this.ctx.lineTo(this.neckX, this.neckY + this.neckHeight);
+        this.ctx.strokeStyle = '#DBB97F';
+        this.ctx.lineCap = 'round';
+        this.ctx.lineWidth = this.neckWidth;
+        this.ctx.stroke();
+    }
+
+    drawHead = function() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.headX, this.headY);
+        this.ctx.lineTo(this.headX, this.headY);
+        this.ctx.strokeStyle = '#DBB97F';
+        this.ctx.lineCap = 'round';
+        this.ctx.lineWidth = this.headWidth;
+        this.ctx.stroke();
+        this.ctx.beginPath();
+        // черты лица в ellipse
+        this.ctx.ellipse(this.headX-this.zoom*6, this.headY - this.zoom*2,// левый глаз
+            this.zoom*2, this.zoom, 0, 0, 2 * Math.PI);
+        this.ctx.ellipse(this.headX+this.zoom*6, this.headY - this.zoom*2,// правый глаз
+            this.zoom*2, this.zoom, 0, 0, 2 * Math.PI);
+        this.ctx.fillStyle = "steelblue";
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.ellipse(this.headX, this.headY+5*this.zoom,// рот
+            this.zoom*4, this.zoom, 0, 0, 2 * Math.PI);
+        this.ctx.fillStyle = "#AB5434";
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.ellipse(this.headX, this.headY - 10*this.zoom,// волосы
+            this.headWidth/3, this.headHeight/3, 0, 0, 2 * Math.PI);
+        this.ctx.fillStyle = "#4A423A";
+        this.ctx.fill();
     }
 
     // drawGoalKeeperArea = function () { // вратарская площадь
@@ -95,6 +140,8 @@ class PlayerView { /* View start */
         if (this.role === "player") this.color = "blue";
         else this.color = "yellow";
         this.drawBody(this.color);
+        this.drawNeck();
+        this.drawHead();
 
     }
 

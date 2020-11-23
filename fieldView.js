@@ -22,8 +22,8 @@ class FieldView { /* View start */
         this.gridColor_1 = "darkgray";
         this.gridColor_2 = "lightgray";
         this.shift = 1;
-        this.penaltyPointX = 800*this.zoom;
-        this.penaltyPointY = 600*this.zoom;
+        this.penaltyPointX = 800*this.zoom; // 11 метровая отметка по x
+        this.penaltyPointY = 600*this.zoom; // 11 метровая отметка по x
         this.penaltyPointRadiusX = 10*this.zoom;
         this.penaltyPointRadiusY = 5*this.zoom;
     }
