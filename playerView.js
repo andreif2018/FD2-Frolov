@@ -12,8 +12,14 @@ class PlayerView { /* View start */
         this.legHeight = 60 * this.zoom;
         this.bodyWidth = 40 * this.zoom;
         this.bodyHeight = 50 * this.zoom;
-        this.bodyX = 800*this.zoom - this.bodyWidth/2; //центр ворот
-        this.bodyY = this.targetLineY - this.legHeight - this.bodyHeight;
+        if (this.role === "player") {
+            this.bodyX = 800*this.zoom - 2*this.bodyWidth;//центр ворот
+            this.bodyY = 600*this.zoom; // 11 метровая отметка по y;
+        }
+        else {
+            this.bodyX = 800*this.zoom - this.bodyWidth/2; //центр ворот
+            this.bodyY = this.targetLineY - this.legHeight - this.bodyHeight;
+        }
         this.neckWidth = 15*this.zoom;
         this.neckHeight = 5*this.zoom;
         this.neckX = this.bodyX + this.bodyWidth/2;
@@ -23,15 +29,15 @@ class PlayerView { /* View start */
         this.headX = this.bodyX + this.bodyWidth/2;
         this.headY = this.neckY - this.headHeight;
         this.boxerX = this.bodyX;
-        this.boxerY = this.targetLineY - this.legHeight - this.zoom*9;
+        this.boxerY = this.bodyY + this.bodyHeight - this.zoom*9;
         this.boxerWidth = this.bodyWidth;
         this.legX = this.bodyX + this.zoom*2;
-        this.legY = this.targetLineY - 0.9*this.legHeight;
+        this.legY = this.bodyY + 0.1 * this.legHeight + this.bodyHeight;
         this.sockX = this.bodyX + this.zoom*2;
-        this.sockY = this.targetLineY - this.legHeight/2;
+        this.sockY = this.bodyY + 0.5*this.legHeight + this.bodyHeight;
         this.sockWidth = this.legWidth*0.9;
         this.bootX = this.bodyX + this.zoom*2;
-        this.bootY = this.targetLineY;
+        this.bootY = this.bodyY + this.legHeight + this.bodyHeight;
         this.bootWidth = this.legWidth*0.9;
         this.leftArmX = this.bodyX;
         this.armY = this.bodyY + this.zoom*2;
@@ -112,70 +118,89 @@ class PlayerView { /* View start */
         if (this.role === "player") var color = "darkblue";
         else color = "yellow";
         this.drawRoundedRect(this.bodyX, this.bodyY, this.bodyWidth, this.bodyHeight, 10*this.zoom, color); //10-radius закругления плечей
-        var gradient = this.ctx.createRadialGradient(
+        var gradient = this.ctx.createRadialGradient( // закраска футболки градиентом
             this.bodyX+20, this.bodyY+20, 5*this.zoom, // 5 - радиус внутрееннго круга
-            this.bodyX, this.bodyY, 10*this.zoom // 10-радиус внешнего круга
-        );
-        if (this.role === "player") gradient.addColorStop(0.75, '#0E82E1');// цвет узора на футболке
-        else gradient.addColorStop(0.75, '#F08A37');
-        gradient.addColorStop(1, color);// цвет футболки
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(this.bodyX + 10*this.zoom, this.bodyY, this.bodyWidth, this.bodyHeight);//10-radius закругления плечей
+            this.bodyX, this.bodyY, 10*this.zoom); // 10-радиус внешнего круга
+        if (this.role === "player") {
+            gradient.addColorStop(0.75, '#0E82E1');// цвет узора на футболке
+            gradient.addColorStop(1, color);// цвет футболки
+            this.ctx.fillStyle = gradient;// закраска футболки градиентом
+            this.ctx.fillRect(this.bodyX + 10*this.zoom, this.bodyY, this.bodyWidth, this.bodyHeight);//10-radius закругления плечей
+            this.ctx.font = this.zoom + 'em' + " serif";
+            this.ctx.fillStyle = 'white';
+            this.ctx.fillText("9", this.bodyX + this.bodyWidth/3, this.bodyY + this.bodyHeight/1.3);
+        }
+        else {
+            gradient.addColorStop(0.75, '#F08A37');// цвет узора на футболке
+            gradient.addColorStop(1, color);// цвет футболки
+            this.ctx.fillStyle = gradient;
+            this.ctx.fillRect(this.bodyX + 10*this.zoom, this.bodyY, this.bodyWidth, this.bodyHeight);//10-radius закругления плечей
+        }
     }
 
     drawArms = function() {
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.leftArmX, this.armY);// левая рука
-        this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
-        this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+        if (this.role === "player") {
 
-        this.ctx.moveTo(this.rightArmX, this.armY);// правая рука
-        this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
-        this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
-        this.ctx.lineCap = 'round';
-        this.ctx.lineWidth = this.armWidth;
-        var linearGradient_2 = this.ctx.createLinearGradient(this.leftArmX, this.armY,  // узоры на рукове
-            this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
-        linearGradient_2.addColorStop(0, 'yellow');
-        linearGradient_2.addColorStop(0.1, 'greenyellow');
-        linearGradient_2.addColorStop(1, 'yellow');
-        this.ctx.strokeStyle = linearGradient_2;
-        this.ctx.stroke();
+        }
+        else {
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.leftArmX, this.armY);// левая рука
+            this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
+            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+
+            this.ctx.moveTo(this.rightArmX, this.armY);// правая рука
+            this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
+            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineCap = 'round';
+            this.ctx.lineWidth = this.armWidth;
+            var linearGradient_2 = this.ctx.createLinearGradient(this.leftArmX, this.armY,  // узоры на рукове
+                this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+            linearGradient_2.addColorStop(0, 'yellow');
+            linearGradient_2.addColorStop(0.1, 'greenyellow');
+            linearGradient_2.addColorStop(1, 'yellow');
+            this.ctx.strokeStyle = linearGradient_2;
+            this.ctx.stroke();
+        }
     }
 
     drawHands = function() {
-        this.ctx.lineWidth = this.handWidth;
-        this.ctx.strokeStyle = "white";
-        this.ctx.beginPath();// левая перчатка
-        this.ctx.moveTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-            this.armY - this.armLength*Math.sin(Math.PI/4));
-        this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-            this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+        if (this.role === "player") {
 
-        var linearGradient_1 = this.ctx.createLinearGradient(this.leftArmX - this.armLength*Math.cos(Math.PI/4),  // перчатки
-            this.armY - this.armLength*Math.sin(Math.PI/4),
-            this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-            this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
-        linearGradient_1.addColorStop(0, 'white');
-        linearGradient_1.addColorStop(0.1, 'lightgray');
-        linearGradient_1.addColorStop(1, 'white');
-        this.ctx.strokeStyle = linearGradient_1;
-        this.ctx.stroke();
+        }
+        else {
+            this.ctx.lineWidth = this.handWidth;
+            this.ctx.strokeStyle = "white";
+            this.ctx.beginPath();// левая перчатка
+            this.ctx.moveTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
+                this.armY - this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
+                this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
 
-        this.ctx.beginPath();// правая перчатка
-        this.ctx.moveTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
-            this.armY - this.armLength*Math.sin(Math.PI/4));
-        this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
-            this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
-        var linearGradient_2 = this.ctx.createLinearGradient(this.rightArmX + this.armLength*Math.cos(Math.PI/4),  // перчатки
-            this.armY - this.armLength*Math.sin(Math.PI/4),
-            this.rightArmX + this.armLength*Math.cos(Math.PI/4),
-            this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
-        linearGradient_2.addColorStop(0, 'white');
-        linearGradient_2.addColorStop(0.1, 'lightgray');
-        linearGradient_2.addColorStop(1, 'white');
-        this.ctx.strokeStyle = linearGradient_2;
-        this.ctx.stroke();
+            var linearGradient_1 = this.ctx.createLinearGradient(this.leftArmX - this.armLength*Math.cos(Math.PI/4),  // перчатки
+                this.armY - this.armLength*Math.sin(Math.PI/4),
+                this.leftArmX - this.armLength*Math.cos(Math.PI/4),
+                this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+            linearGradient_1.addColorStop(0, 'white');
+            linearGradient_1.addColorStop(0.1, 'lightgray');
+            linearGradient_1.addColorStop(1, 'white');
+            this.ctx.strokeStyle = linearGradient_1;
+            this.ctx.stroke();
+
+            this.ctx.beginPath();// правая перчатка
+            this.ctx.moveTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
+                this.armY - this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
+                this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+            var linearGradient_2 = this.ctx.createLinearGradient(this.rightArmX + this.armLength*Math.cos(Math.PI/4),  // перчатки
+                this.armY - this.armLength*Math.sin(Math.PI/4),
+                this.rightArmX + this.armLength*Math.cos(Math.PI/4),
+                this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+            linearGradient_2.addColorStop(0, 'white');
+            linearGradient_2.addColorStop(0.1, 'lightgray');
+            linearGradient_2.addColorStop(1, 'white');
+            this.ctx.strokeStyle = linearGradient_2;
+            this.ctx.stroke();
+        }
     }
 
     drawBoxers = function() {
@@ -204,21 +229,20 @@ class PlayerView { /* View start */
     drawBoots = function() {
         this.ctx.beginPath();
         if (this.role === "player") {
-            this.ctx.ellipse(this.bootX + this.bootWidth*0.5, this.bootY, this.legWidth, 6*this.zoom,
-                Math.PI/2, 0, 2 * Math.PI);
-            this.ctx.ellipse(this.bootX + this.bootWidth*2.3, this.bootY, this.bootWidth*0.9, 6*this.zoom,
-                Math.PI/4, 0, 2 * Math.PI);
+            this.ctx.ellipse(this.bootX + this.bootWidth*0.5, this.bootY, this.legWidth/2, 8*this.zoom,
+                Math.PI/2, 0, 2 * Math.PI);// левая бутса
+            this.ctx.ellipse(this.bootX + this.bootWidth*2.3, this.bootY - this.legHeight/20, this.bootWidth*0.9, 8*this.zoom,
+                3*Math.PI/4, 0, 2 * Math.PI);// правая бутса
         }
         else {
             this.ctx.ellipse(this.bootX + this.bootWidth*0.2, this.bootY, this.legWidth, 6*this.zoom,
-                -Math.PI/4, 0, 2 * Math.PI); // левая бутса
+                3*Math.PI/4, 0, 2 * Math.PI); // левая бутса
             this.ctx.ellipse(this.bootX + this.bootWidth*2.3, this.bootY, this.bootWidth*0.9, 6*this.zoom,
                 Math.PI/4, 0, 2 * Math.PI); // правая бутса
         }
         this.ctx.fillStyle = "#2A2A17"
         this.ctx.fill();
     }
-
 
     drawPlayer = function() {
         this.drawBoots();

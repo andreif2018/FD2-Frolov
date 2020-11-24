@@ -6,11 +6,24 @@ class PlayerModel { /* Model start */
         this.view = view;
         this.interval = null;
         this.timeout = null;
-        this.role = role;
     }
 
     start = function () {
-        this.view.drawPlayer(this.role);
+        this.view.drawPlayer();
+    }
+
+    goalStage = function () {
+        var self = this;
+        this.view.drawPlayer();
+        self.interval  = setInterval(() => { self.view.drawPlayer();}, 25)
+        setTimeout(() => {
+            clearInterval(self.interval);
+            self.start();
+        }, 2000);
+    }
+
+    stopGoalStage = function () {
+        clearTimeout(this.timeout);
     }
 
     handsUp = function () {

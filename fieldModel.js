@@ -15,11 +15,10 @@ class FieldModel { /* Model start */
     goalStage = function () {
         var self = this;
         self.view.drawFieldShakeGrid();
-        self.interval  = setInterval(() => { self.view.drawFieldShakeGrid();}, 100)
+        self.interval  = setInterval(() => {self.view.drawFieldShakeGrid();}, 150)
         setTimeout(() => {
             clearInterval(self.interval);
-            self.start();
-        }, 3000);
+            self.start(); }, 2000);
     }
 
     stopGoalStage = function () {
