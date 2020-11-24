@@ -59,7 +59,7 @@ class FieldView {
         gradient.addColorStop(0.1, 'darkolivegreen');// цвет внутрееннго круга, // 0.5 коэфициент перехода для градиента
         gradient.addColorStop(1, 'seagreen');// цвет внешнего круга
         this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(this.targetX + this.targetLength/2.5 /*левее центра площади ворот*/, this.targetLineY + this.targetLineWidth/2,
+        this.ctx.fillRect(this.targetX + this.targetLength/2.5 /*левее центра площади ворот*/, this.targetLineY + this.targetLineWidth/3,
             this.targetGap, this.targetGap/1.25); // закраска площади градиентом
     }
 
