@@ -139,20 +139,43 @@ class PlayerView { /* View start */
     }
 
     drawArms = function() {
-        if (this.role === "player") {
+        this.ctx.beginPath();
+        this.ctx.lineCap = 'round';
+        if (this.role === "player") {// левая рука
+            this.ctx.moveTo(this.leftArmX - this.armWidth/8, this.armY + 1.1*this.armLength);// левая рука, armWidth/8 сдвиг от плеча
+            this.ctx.lineTo(this.leftArmX - this.armWidth/8, this.armY + 2.2*this.armLength); // 2*armLength - длина руки arm + hand
+            this.ctx.lineWidth = this.armWidth*0.5;
+            this.ctx.strokeStyle = 'navajowhite';
+            this.ctx.stroke();
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.leftArmX + this.armWidth/8, this.armY + this.armLength/3);
+            this.ctx.lineTo(this.leftArmX, this.armY + this.armLength);// левый рукав
+            this.ctx.lineWidth = this.armWidth;
+            this.ctx.strokeStyle = 'mediumblue';
+            this.ctx.stroke();
 
+            this.ctx.beginPath();// правая рука
+            this.ctx.moveTo(this.rightArmX, this.armY + this.armLength/3);
+            this.ctx.lineTo(this.rightArmX + this.armWidth/2, this.armY + 2.2*this.armLength);//armWidth/1.5 - рука под углом, 2*armLength - длина руки arm + hand
+            this.ctx.lineWidth = this.armWidth*0.5;
+            this.ctx.strokeStyle = 'navajowhite';
+            this.ctx.stroke();
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.rightArmX - this.armWidth/8, this.armY + this.armLength/3);
+            this.ctx.lineTo(this.rightArmX + this.armWidth/5, this.armY + this.armLength);// правый рукав
+            this.ctx.lineWidth = this.armWidth;
+            this.ctx.strokeStyle = 'mediumblue';
+            this.ctx.stroke();
         }
         else {
-            this.ctx.beginPath();
             this.ctx.moveTo(this.leftArmX, this.armY);// левая рука
+            this.ctx.lineWidth = this.armWidth;
             this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
             this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
 
             this.ctx.moveTo(this.rightArmX, this.armY);// правая рука
             this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
             this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
-            this.ctx.lineCap = 'round';
-            this.ctx.lineWidth = this.armWidth;
             var linearGradient_2 = this.ctx.createLinearGradient(this.leftArmX, this.armY,  // узоры на рукове
                 this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
             linearGradient_2.addColorStop(0, 'yellow');
@@ -164,11 +187,12 @@ class PlayerView { /* View start */
     }
 
     drawHands = function() {
+        this.ctx.lineWidth = this.handWidth;
         if (this.role === "player") {
 
         }
         else {
-            this.ctx.lineWidth = this.handWidth;
+
             this.ctx.strokeStyle = "white";
             this.ctx.beginPath();// левая перчатка
             this.ctx.moveTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
@@ -186,8 +210,7 @@ class PlayerView { /* View start */
             this.ctx.strokeStyle = linearGradient_1;
             this.ctx.stroke();
 
-            this.ctx.beginPath();// правая перчатка
-            this.ctx.moveTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
+            this.ctx.moveTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),// правая перчатка
                 this.armY - this.armLength*Math.sin(Math.PI/4));
             this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
                 this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
