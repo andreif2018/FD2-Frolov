@@ -1,39 +1,27 @@
 "use strict";
 
-class PlayerModel { /* Model start */
-
+class PlayerModel {
     constructor(view, role) {
         this.view = view;
         this.interval = null;
         this.timeout = null;
     }
 
-    start = function () {
-        this.view.drawPlayer();
+    run = function () {
+        this.view.drawPlayer(false);
     }
 
     goalStage = function () {
         var self = this;
-        this.view.drawPlayer();
-        self.interval  = setInterval(() => { self.view.drawPlayer();}, 25)
+        this.view.drawPlayer(true);
+        self.interval  = setInterval(() => { self.view.drawPlayer(true);}, 5)
         setTimeout(() => {
             clearInterval(self.interval);
-            self.start();
+            self.stopGoalStage();
         }, 2000);
     }
 
     stopGoalStage = function () {
-        clearTimeout(this.timeout);
-    }
-
-    handsUp = function () {
-        var self = this;
-        self.view.handsUp();
-        setTimeout(() => { self.start();}, 4000);
-    }
-
-    handsDown = function () {
-        this.view.drawPlayer();
         clearTimeout(this.timeout);
     }
 }

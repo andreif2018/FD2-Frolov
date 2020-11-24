@@ -1,6 +1,6 @@
 "use strict";
 
-class PlayerView { /* View start */
+class PlayerView {
     constructor(container, role) {
         this.container = container;
         this.ctx = this.container.getContext('2d');
@@ -14,7 +14,7 @@ class PlayerView { /* View start */
         this.bodyHeight = 50 * this.zoom;
         if (this.role === "player") {
             this.bodyX = 800*this.zoom - 2*this.bodyWidth;//центр ворот
-            this.bodyY = 600*this.zoom; // 11 метровая отметка по y;
+            this.bodyY = 550*this.zoom; // 11 метровая отметка по y;
         }
         else {
             this.bodyX = 800*this.zoom - this.bodyWidth/2; //центр ворот
@@ -45,9 +45,10 @@ class PlayerView { /* View start */
         this.armLength = 25 * this.zoom;
         this.rightArmX = this.bodyX + this.bodyWidth;
         this.handWidth = 14 *this.zoom;
+        this.jump = this.zoom*10;
     }
 
-    drawRoundedRect = function(x , y, width, height, radius, color) {
+    drawRoundedRect = function (x , y, width, height, radius, color) {
         if (width < 2 * radius) radius = width / 2;
         if (height < 2 * radius) radius = height / 2;
         this.ctx.beginPath();
@@ -62,7 +63,7 @@ class PlayerView { /* View start */
         return this;
     }
 
-    drawHead = function() {
+    drawHead = function () {
         this.ctx.beginPath();
         this.ctx.moveTo(this.headX, this.headY);
         this.ctx.lineTo(this.headX, this.headY);
@@ -104,7 +105,7 @@ class PlayerView { /* View start */
         }
     }
 
-    drawNeck = function() {
+    drawNeck = function () {
         this.ctx.beginPath();
         this.ctx.moveTo(this.neckX, this.neckY);
         this.ctx.lineTo(this.neckX, this.neckY + this.neckHeight);
@@ -114,7 +115,7 @@ class PlayerView { /* View start */
         this.ctx.stroke();
     }
 
-    drawBody = function() {
+    drawBody = function () {
         if (this.role === "player") var color = "darkblue";
         else color = "yellow";
         this.drawRoundedRect(this.bodyX, this.bodyY, this.bodyWidth, this.bodyHeight, 10*this.zoom, color); //10-radius закругления плечей
@@ -138,33 +139,41 @@ class PlayerView { /* View start */
         }
     }
 
-    drawArms = function() {
+    drawArms = function (goal) {
         this.ctx.beginPath();
         this.ctx.lineCap = 'round';
-        if (this.role === "player") {// левая рука
-            this.ctx.moveTo(this.leftArmX - this.armWidth/8, this.armY + 1.1*this.armLength);// левая рука, armWidth/8 сдвиг от плеча
-            this.ctx.lineTo(this.leftArmX - this.armWidth/8, this.armY + 2.2*this.armLength); // 2*armLength - длина руки arm + hand
+        if (this.role === "player") {
+            if (goal) {
+                var handsUp = -1;// в случае гола руки поднимаются по направлению вверх по оси Y
+                var specificGap = this.zoom*5; //дополнительное смещение для поднятого вверх рукава
+            }
+            else {// обычное сосотяние- руки вниз
+                handsUp = 1;
+                specificGap = 0;//дополнительное смещение для поднятого вверх рукава рвно нулю
+            }// левая рука
+            this.ctx.moveTo(this.leftArmX - this.armWidth/8, this.armY + handsUp*1.1*this.armLength);// левая рука, armWidth/8 сдвиг от плеча
+            this.ctx.lineTo(this.leftArmX - this.armWidth/8, this.armY + handsUp*2.2*this.armLength); // 2*armLength - длина руки arm + hand
             this.ctx.lineWidth = this.armWidth*0.5;
             this.ctx.strokeStyle = 'navajowhite';
             this.ctx.stroke();
             this.ctx.beginPath();
-            this.ctx.moveTo(this.leftArmX + this.armWidth/8, this.armY + this.armLength/3);
-            this.ctx.lineTo(this.leftArmX, this.armY + this.armLength);// левый рукав
+            this.ctx.moveTo(this.leftArmX + this.armWidth/8, this.armY + handsUp*this.armLength/3 + specificGap);
+            this.ctx.lineTo(this.leftArmX, this.armY + handsUp*this.armLength );// левый рукав
             this.ctx.lineWidth = this.armWidth;
-            this.ctx.strokeStyle = 'mediumblue';
+            this.ctx.strokeStyle = 'darkblue';
             this.ctx.stroke();
 
             this.ctx.beginPath();// правая рука
-            this.ctx.moveTo(this.rightArmX, this.armY + this.armLength/3);
-            this.ctx.lineTo(this.rightArmX + this.armWidth/2, this.armY + 2.2*this.armLength);//armWidth/1.5 - рука под углом, 2*armLength - длина руки arm + hand
+            this.ctx.moveTo(this.rightArmX, this.armY + handsUp*this.armLength/3);
+            this.ctx.lineTo(this.rightArmX + this.armWidth/2, this.armY + handsUp*2.2*this.armLength);//armWidth/1.5 - рука под углом, 2*armLength - длина руки arm + hand
             this.ctx.lineWidth = this.armWidth*0.5;
             this.ctx.strokeStyle = 'navajowhite';
             this.ctx.stroke();
             this.ctx.beginPath();
-            this.ctx.moveTo(this.rightArmX - this.armWidth/8, this.armY + this.armLength/3);
-            this.ctx.lineTo(this.rightArmX + this.armWidth/5, this.armY + this.armLength);// правый рукав
+            this.ctx.moveTo(this.rightArmX - this.armWidth/8, this.armY + handsUp*this.armLength/3 + specificGap);
+            this.ctx.lineTo(this.rightArmX + this.armWidth/5, this.armY + handsUp*this.armLength);// правый рукав
             this.ctx.lineWidth = this.armWidth;
-            this.ctx.strokeStyle = 'mediumblue';
+            this.ctx.strokeStyle = 'darkblue';
             this.ctx.stroke();
         }
         else {
@@ -186,13 +195,9 @@ class PlayerView { /* View start */
         }
     }
 
-    drawHands = function() {
+    drawHands = function () {
         this.ctx.lineWidth = this.handWidth;
-        if (this.role === "player") {
-
-        }
-        else {
-
+        if (this.role !== "player") {
             this.ctx.strokeStyle = "white";
             this.ctx.beginPath();// левая перчатка
             this.ctx.moveTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
@@ -226,7 +231,7 @@ class PlayerView { /* View start */
         }
     }
 
-    drawBoxers = function() {
+    drawBoxers = function () {
         if (this.role === "player") var color = "mediumblue";
         else color = "#2A2A17";
         this.drawRoundedRect(this.boxerX, this.boxerY, this.boxerWidth/2, this.legHeight/2, 7*this.zoom, color);
@@ -234,14 +239,14 @@ class PlayerView { /* View start */
         this.drawRoundedRect(this.boxerX + this.boxerWidth/2, this.boxerY, this.boxerWidth/2, this.legHeight/2, 7*this.zoom, color);
     }
 
-    drawLegs = function() {
+    drawLegs = function () {
         var color = "navajowhite";
         this.drawRoundedRect(this.legX, this.legY, this.legWidth, this.legHeight/2, 10*this.zoom, color);
         // 10-radius закругления
         this.drawRoundedRect(this.legX + this.legWidth + this.legGap, this.legY, this.legWidth, this.legHeight/2, 10*this.zoom, color);
     }
 
-    drawSocks = function() {
+    drawSocks = function () {
         if (this.role === "player") var color = "midnightblue";
         else color = "#2A2A17";
         this.drawRoundedRect(this.sockX, this.sockY, this.sockWidth, this.legHeight/2, 5*this.zoom, color);
@@ -249,7 +254,7 @@ class PlayerView { /* View start */
         this.drawRoundedRect(this.sockX + this.sockWidth + this.legGap*1.5, this.sockY, this.sockWidth, this.legHeight/2, 5*this.zoom, color);
     }
 
-    drawBoots = function() {
+    drawBoots = function () {
         this.ctx.beginPath();
         if (this.role === "player") {
             this.ctx.ellipse(this.bootX + this.bootWidth*0.5, this.bootY, this.legWidth/2, 8*this.zoom,
@@ -267,12 +272,12 @@ class PlayerView { /* View start */
         this.ctx.fill();
     }
 
-    drawPlayer = function() {
+    drawPlayer = function (goal) {
         this.drawBoots();
         this.drawSocks();
         this.drawLegs();
         this.drawBoxers();
-        this.drawArms();
+        this.drawArms(goal);
         this.drawHands();
         this.drawBody();
         this.drawNeck();

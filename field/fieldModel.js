@@ -1,14 +1,13 @@
 "use strict";
 
-class FieldModel { /* Model start */
-
+class FieldModel {
     constructor(view) {
         this.view = view;
         this.interval = null;
         this.timeout = null;
     }
 
-    start = function () {
+    run = function () {
         this.view.drawField();
     }
 
@@ -18,7 +17,8 @@ class FieldModel { /* Model start */
         self.interval  = setInterval(() => {self.view.drawFieldShakeGrid();}, 150)
         setTimeout(() => {
             clearInterval(self.interval);
-            self.start(); }, 2000);
+            self.stopGoalStage();
+            }, 2000);
     }
 
     stopGoalStage = function () {

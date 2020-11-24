@@ -1,6 +1,6 @@
 "use strict";
 
-class FieldView { /* View start */
+class FieldView {
     constructor(container) {
         this.container = container;
         this.ctx = this.container.getContext('2d');
@@ -28,7 +28,7 @@ class FieldView { /* View start */
         this.penaltyPointRadiusY = 5*this.zoom;
     }
 
-    drawFieldEdge = function() { // разметка поля
+    drawFieldEdge = function () { // разметка поля
         this.ctx.lineWidth = this.fieldLineWidth;
         this.ctx.strokeStyle = 'white';
         this.ctx.beginPath();
@@ -63,7 +63,7 @@ class FieldView { /* View start */
             this.targetGap, this.targetGap/1.25); // закраска площади градиентом
     }
 
-    drawPenaltyPoint = function() { // 11-метровая отметка
+    drawPenaltyPoint = function () { // 11-метровая отметка
         this.ctx.lineWidth = this.fieldLineWidth;
         this.ctx.fillStyle = 'white';
         this.ctx.strokeStyle = 'white';
@@ -72,7 +72,7 @@ class FieldView { /* View start */
         this.ctx.fill();
     }
 
-    drawTarget = function() {
+    drawTarget = function () {
         this.ctx.lineWidth = this.targetLineWidth;
         this.ctx.strokeStyle = 'azure';
 
@@ -108,7 +108,7 @@ class FieldView { /* View start */
         this.ctx.stroke();
     }
 
-    drawGrid = function(color = this.gridColor_1, color_2 = this.gridColor_2, shift = this.shift) {
+    drawGrid = function (color = this.gridColor_1, color_2 = this.gridColor_2, shift = this.shift) {
         this.ctx.lineWidth = 2*this.zoom;
         this.ctx.strokeStyle = color;
         var leftStartPointX = this.targetX + this.targetInternalGapX;
@@ -139,7 +139,7 @@ class FieldView { /* View start */
         }
     }
 
-    drawFieldShakeGrid = function() {
+    drawFieldShakeGrid = function () {
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
         var self = this;
         if (self.gridColor_1 === "darkgray") { /* цвет линий сетки меняется между собой для эфекта движения */
@@ -159,7 +159,7 @@ class FieldView { /* View start */
         self.drawTarget();
     }
 
-    drawField = function() {
+    drawField = function () {
         var self = this;
         self.drawFieldEdge();
         self.drawGoalKeeperArea();
