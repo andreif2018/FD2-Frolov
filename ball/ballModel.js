@@ -1,6 +1,6 @@
 "use strict";
 
-class PlayerModel {
+class BallModel {
     constructor(view) {
         this.view = view;
         this.interval = null;
@@ -8,17 +8,17 @@ class PlayerModel {
     }
 
     run = function () {
-        this.view.drawPlayer(false);
+        this.view.drawBall();
     }
 
     goalStage = function () {
         var self = this;
-        this.view.drawPlayer(true);
-        self.interval  = setInterval(() => { self.view.drawPlayer(true);}, 1)
+        self.view.drawBallJump();
+        self.interval  = setInterval(() => {self.view.drawBallJump();}, 150)
         setTimeout(() => {
             clearInterval(self.interval);
             self.stopGoalStage();
-        }, 2000);
+            }, 2000);
     }
 
     stopGoalStage = function () {

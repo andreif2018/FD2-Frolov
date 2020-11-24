@@ -14,7 +14,6 @@ class PlayerView {
         this.legHeight = 65 * this.zoom * this.multiplier;
         this.bodyWidth = 40 * this.zoom * this.multiplier;
         this.bodyHeight = 50 * this.zoom * this.multiplier;
-        this.jump = this.zoom;
         if (this.role === "player") {
             this.bodyX = 800*this.zoom - 2*this.bodyWidth;//центр ворот
             this.bodyY = 475*this.zoom;
@@ -48,6 +47,7 @@ class PlayerView {
         this.armLength = 25 * this.zoom * this.multiplier;
         this.rightArmX = this.bodyX + this.bodyWidth;
         this.handWidth = 14 *this.zoom * this.multiplier;
+        this.shake = this.zoom;
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
@@ -141,17 +141,17 @@ class PlayerView {
         }
     }
 
-    drawArms = function (goal) {
+    drawArms = function (goal = false) {
         this.ctx.beginPath();
         this.ctx.lineCap = 'round';
         if (this.role === "player") {
             if (goal) {
                 var handsUp = -1;// в случае гола руки поднимаются по направлению вверх по оси Y
-                var specificGap = this.zoom*5; //дополнительное смещение для поднятого вверх рукава
+                var straightArm = this.zoom*5; //дополнительное смещение для поднятого вверх рукава
             }
             else {// обычное сосотяние- руки вниз
                 handsUp = 1;
-                specificGap = 0;//дополнительное смещение для поднятого вверх рукава рвно нулю
+                straightArm = 0;//дополнительное смещение для поднятого вверх рукава рвно нулю
             }// левая рука
             this.ctx.moveTo(this.leftArmX - this.armWidth/8, this.armY + handsUp*1.1*this.armLength);// левая рука, armWidth/8 сдвиг от плеча
             this.ctx.lineTo(this.leftArmX - this.armWidth/8, this.armY + handsUp*2.2*this.armLength); // 2*armLength - длина руки arm + hand
@@ -159,7 +159,7 @@ class PlayerView {
             this.ctx.strokeStyle = 'navajowhite';
             this.ctx.stroke();
             this.ctx.beginPath();
-            this.ctx.moveTo(this.leftArmX + this.armWidth/8, this.armY + handsUp*this.armLength/3 + specificGap);
+            this.ctx.moveTo(this.leftArmX + this.armWidth/8, this.armY + handsUp*this.armLength/3 + straightArm);
             this.ctx.lineTo(this.leftArmX, this.armY + handsUp*this.armLength );// левый рукав
             this.ctx.lineWidth = this.armWidth;
             this.ctx.strokeStyle = 'darkblue';
@@ -172,21 +172,29 @@ class PlayerView {
             this.ctx.strokeStyle = 'navajowhite';
             this.ctx.stroke();
             this.ctx.beginPath();
-            this.ctx.moveTo(this.rightArmX - this.armWidth/8, this.armY + handsUp*this.armLength/3 + specificGap);
+            this.ctx.moveTo(this.rightArmX - this.armWidth/8, this.armY + handsUp*this.armLength/3 + straightArm);
             this.ctx.lineTo(this.rightArmX + this.armWidth/5, this.armY + handsUp*this.armLength);// правый рукав
             this.ctx.lineWidth = this.armWidth;
             this.ctx.strokeStyle = 'darkblue';
             this.ctx.stroke();
         }
-        else {
+        else { // вратарь
+            if (goal) {
+                var handsDown = -1;
+                var straightArm = 5*this.zoom;//дополнительное смещение для выпрямления руки
+            }
+            else {
+                handsDown = 1;
+                straightArm = 0; //нет смещения для выпрямления руки
+            }
             this.ctx.moveTo(this.leftArmX, this.armY);// левая рука
             this.ctx.lineWidth = this.armWidth;
-            this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
-            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - handsDown*this.armLength/2*Math.sin(Math.PI/6));
+            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4) - straightArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
 
             this.ctx.moveTo(this.rightArmX, this.armY);// правая рука
-            this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - this.armLength/2*Math.sin(Math.PI/6));
-            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - handsDown*this.armLength/2*Math.sin(Math.PI/6));
+            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4) + straightArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             var linearGradient_2 = this.ctx.createLinearGradient(this.leftArmX, this.armY,  // узоры на рукове
                 this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
             linearGradient_2.addColorStop(0, 'yellow');
@@ -197,17 +205,25 @@ class PlayerView {
         }
     }
 
-    drawHands = function () {
+    drawHands = function (goal = false) {
         this.ctx.lineWidth = this.handWidth;
         if (this.role !== "player") {
+            if (goal) {
+                var handsDown = -1;
+                var straightArm = 5*this.zoom;//дополнительное смещение для выпрямления руки
+            }
+            else {
+                handsDown = 1;
+                straightArm = 0; //нет смещения для выпрямления руки
+            }
             this.ctx.strokeStyle = "white";
             this.ctx.beginPath();// левая перчатка
             this.ctx.moveTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-                this.armY - this.armLength*Math.sin(Math.PI/4));
+                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-                this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
 
-            var linearGradient_1 = this.ctx.createLinearGradient(this.leftArmX - this.armLength*Math.cos(Math.PI/4),  // перчатки
+            var linearGradient_1 = this.ctx.createLinearGradient(this.leftArmX - this.armLength*Math.cos(Math.PI/4),  // градиент перчатки
                 this.armY - this.armLength*Math.sin(Math.PI/4),
                 this.leftArmX - this.armLength*Math.cos(Math.PI/4),
                 this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
@@ -218,10 +234,10 @@ class PlayerView {
             this.ctx.stroke();
 
             this.ctx.moveTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),// правая перчатка
-                this.armY - this.armLength*Math.sin(Math.PI/4));
+                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
-                this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
-            var linearGradient_2 = this.ctx.createLinearGradient(this.rightArmX + this.armLength*Math.cos(Math.PI/4),  // перчатки
+                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+            var linearGradient_2 = this.ctx.createLinearGradient(this.rightArmX + this.armLength*Math.cos(Math.PI/4),  // градиент перчатки
                 this.armY - this.armLength*Math.sin(Math.PI/4),
                 this.rightArmX + this.armLength*Math.cos(Math.PI/4),
                 this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
@@ -277,19 +293,21 @@ class PlayerView {
     drawPlayer = function (goal) {
         if (goal) {
             if (this.role === "player") {
-                this.jump = (-1)*this.jump;
-                this.bodyY = 475*this.zoom + this.jump;
+                this.shake = -1 * this.shake;
+                this.bodyY = 475 * this.zoom + this.shake;
             }
         }
         else {
-            if (this.role === "player") this.bodyY = 475*this.zoom;
+            if (this.role === "player") {
+                this.bodyY = 475*this.zoom;
+            }
         }
         this.drawBoots();
         this.drawSocks();
         this.drawLegs();
         this.drawBoxers();
         this.drawArms(goal);
-        this.drawHands();
+        this.drawHands(goal);
         this.drawBody();
         this.drawNeck();
         this.drawHead();
