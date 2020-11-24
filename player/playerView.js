@@ -7,16 +7,17 @@ class PlayerView {
         this.zoom = 1; // для +/- разрешения экрана
         this.targetLineY = 200*this.zoom; // линия ворот с началом у левого края видимой части поля
         this.role = role;
-        if (this.role === "player") this.multiplier = 1.7;
-        else this.multiplier = 1;
+        if (this.role === "player") this.multiplier = 1.7;  //170% масштаб фигуры игрока тк он расположен ближе к пользователю
+        else this.multiplier = 1; // 100% масштаб фигуры вратаря
         this.legWidth = 15 * this.zoom * this.multiplier;
         this.legGap = 5*this.zoom * this.multiplier;
         this.legHeight = 65 * this.zoom * this.multiplier;
         this.bodyWidth = 40 * this.zoom * this.multiplier;
         this.bodyHeight = 50 * this.zoom * this.multiplier;
+        this.jump = this.zoom;
         if (this.role === "player") {
             this.bodyX = 800*this.zoom - 2*this.bodyWidth;//центр ворот
-            this.bodyY = 550*this.zoom; // 11 метровая отметка по y;
+            this.bodyY = 475*this.zoom;
         }
         else {
             this.bodyX = 800*this.zoom - this.bodyWidth/2; //центр ворот
@@ -47,7 +48,6 @@ class PlayerView {
         this.armLength = 25 * this.zoom * this.multiplier;
         this.rightArmX = this.bodyX + this.bodyWidth;
         this.handWidth = 14 *this.zoom * this.multiplier;
-        this.jump = this.zoom*10;
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
@@ -275,6 +275,15 @@ class PlayerView {
     }
 
     drawPlayer = function (goal) {
+        if (goal) {
+            if (this.role === "player") {
+                this.jump = (-1)*this.jump;
+                this.bodyY = 475*this.zoom + this.jump;
+            }
+        }
+        else {
+            if (this.role === "player") this.bodyY = 475*this.zoom;
+        }
         this.drawBoots();
         this.drawSocks();
         this.drawLegs();
