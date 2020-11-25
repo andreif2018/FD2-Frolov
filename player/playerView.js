@@ -293,7 +293,7 @@ class PlayerView {
     drawPlayer = function (goal) {
         if (goal) {
             if (this.role === "player") {
-                this.shake = -1 * this.shake;
+                this.shake = -this.shake;
                 this.bodyY = 475 * this.zoom + this.shake;
             }
         }
