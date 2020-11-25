@@ -1,5 +1,36 @@
 "use strict";
+class Game {
+    constructor() {
+        this.interval = null;
+        this.timeout = null;
+    }
 
+    regularState = function () {
+        ctx.clearRect(0, 0, container.width, container.height);
+        fieldController.run();
+        goalKeeperController.run();
+        playerController.run();
+        ballController.run();
+    }
+
+    goalStage = function () {
+        var self = this;
+        this.regularState();
+        self.interval  = setInterval(() => {
+            fieldController.model.goalStage();
+            goalKeeperController.model.goalStage();
+            playerController.model.goalStage();
+        }, 150)
+        this.timeout = setTimeout(() => {
+            clearInterval(self.interval);
+            self.stopGoalStage();
+        }, 2000);
+    }
+
+    stopGoalStage = function () {
+        clearTimeout(this.timeout);
+    }
+}
 var container = document.getElementById("container");
 var ctx = container.getContext('2d');
 var fieldView = new FieldView(container);
@@ -18,23 +49,6 @@ var ballView = new BallView(container);
 var ballModel = new BallModel(ballView);
 var ballController = new BallController(ballModel, ballView);
 
-var regularState = function () {
-    ctx.clearRect(0, 0, container.width, container.height);
-    fieldController.run();
-    goalKeeperController.run();
-    playerController.run();
-    ballController.run();
-
-}
-
-var goalStage = function () {
-        fieldController.model.goalStage();
-        goalKeeperController.model.goalStage();
-        playerController.model.goalStage();
-        ballController.run();
-}
-goalStage();
-var timeout = setTimeout( () => {regularState();}, 2500);
-
-// clearTimeout(timeout);
-
+var g = new Game();
+g.regularState();
+g.goalStage();

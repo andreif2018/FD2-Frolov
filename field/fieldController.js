@@ -10,4 +10,8 @@ class FieldController {
         this.model.run();
     }
 
+    goalStage = function () {
+        this.model.goalStage();
+    }
+
 }

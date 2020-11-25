@@ -9,4 +9,8 @@ class PlayerController {
     run = function () {
         this.model.run();
     }
+
+    goalStage = function () {
+        this.model.goalStage();
+    }
 }
