@@ -6,8 +6,15 @@ class BallController {
         this.view = view;
     }
 
-    run = function () {
-        this.model.run();
+    start = function () {
+        this.model.start();
     }
 
+    kick = function () {
+        this.model.kick();
+    }
+
+    goalStage = function () {
+        this.model.goalStage();
+    }
 }

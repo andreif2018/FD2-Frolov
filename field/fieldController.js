@@ -6,8 +6,8 @@ class FieldController {
         this.view = view;
     }
 
-    run = function () {
-        this.model.run();
+    start = function () {
+        this.model.start();
     }
 
     goalStage = function () {

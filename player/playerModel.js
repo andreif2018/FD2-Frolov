@@ -5,7 +5,7 @@ class PlayerModel {
         this.view = view;
     }
 
-    run = function () {
+    start = function () {
         this.view.drawPlayer(false);
     }
 

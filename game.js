@@ -1,8 +1,12 @@
 "use strict";
 class Game {
     constructor() {
-        this.interval = null;
-        this.timeout = null;
+        this.kickInterval = null;
+        this.kickTimeout = null;
+        this.kickInterval2 = null;
+        this.kickTimeout2 = null;
+        this.goalInterval = null;
+        this.goalTimeout = null;
         this.container = document.getElementById("container");
         this.ctx = this.container.getContext('2d');
         this.fieldView = new FieldView(this.container);
@@ -24,31 +28,51 @@ class Game {
 
     regularState = function () {
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
-        this.fieldController.run();
-        this.goalKeeperController.run();
-        this.playerController.run();
-        this.ballController.run();
+        this.fieldController.start();
+        this.goalKeeperController.start();
+        this.playerController.start();
+        this.ballController.start();
+    }
+
+    regularStateNoBall = function () {
+        this.ctx.clearRect(0, 0, this.container.width, this.container.height);
+        this.fieldController.start();
+        this.goalKeeperController.start();
+        this.playerController.start();
+    }
+
+    kickStage = function () {
+        var self = this;
+        self.regularStateNoBall();
+        self.ballController.kick();
+        self.kickInterval2 = requestAnimationFrame( () => {self.kickStage();});
+        self.kickTimeout2 = setTimeout(() => {
+            cancelAnimationFrame(self.kickInterval2);
+        }, 1500);
     }
 
     goalStage = function () {
+        clearTimeout(this.kickTimeout);
         var self = this;
-        this.regularState();
-        self.interval  = setInterval(() => {
-            this.fieldController.model.goalStage();
-            this.goalKeeperController.model.goalStage();
-            this.playerController.model.goalStage();
+        self.goalInterval  = setInterval(() => {
+            self.fieldController.goalStage();
+            self.goalKeeperController.goalStage();
+            self.ballController.goalStage();
+            self.playerController.goalStage();
         }, 150)
-        this.timeout = setTimeout(() => {
-            clearInterval(self.interval);
+        self.goalTimeout = setTimeout(() => {
+            clearInterval(self.goalInterval);
             self.stopGoalStage();
+            self.regularState();
         }, 2000);
     }
 
     stopGoalStage = function () {
-        clearTimeout(this.timeout);
+        clearTimeout(this.goalTimeout);
     }
 }
 
 var g = new Game();
-g.regularState();
-g.goalStage();
+//g.regularState();
+g.kickStage();
+//g.goalStage();

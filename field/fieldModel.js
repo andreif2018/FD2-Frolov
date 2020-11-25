@@ -5,7 +5,7 @@ class FieldModel {
         this.view = view;
     }
 
-    run = function () {
+    start = function () {
         this.view.drawField();
     }
 

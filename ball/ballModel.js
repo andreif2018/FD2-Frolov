@@ -7,21 +7,21 @@ class BallModel {
         this.timeout = null;
     }
 
-    run = function () {
+    start = function () {
         this.view.drawBall();
     }
 
-    goalStage = function () {
-        var self = this;
-        self.view.drawBallJump();
-        self.interval  = setInterval(() => {self.view.drawBallJump();}, 150)
-        setTimeout(() => {
-            clearInterval(self.interval);
-            self.stopGoalStage();
-            }, 2000);
+    kick = function () {
+        this.view.ballKick();
     }
 
-    stopGoalStage = function () {
-        clearTimeout(this.timeout);
+    goalStage = function () {
+        this.view.ballInTarget();
     }
+
+    outStage = function () {
+        this.view.ballOutTarget();
+    }
+
+
 }
