@@ -15,7 +15,7 @@ class FieldModel {
         var self = this;
         self.view.drawFieldShakeGrid();
         self.interval  = setInterval(() => {self.view.drawFieldShakeGrid();}, 150)
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
             clearInterval(self.interval);
             self.stopGoalStage();
             }, 2000);

@@ -47,7 +47,7 @@ class PlayerView {
         this.armLength = 25 * this.zoom * this.multiplier;
         this.rightArmX = this.bodyX + this.bodyWidth;
         this.handWidth = 14 *this.zoom * this.multiplier;
-        this.shake = this.zoom;
+        this.shake = 0.75*this.zoom;
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
@@ -181,20 +181,20 @@ class PlayerView {
         else { // вратарь
             if (goal) {
                 var handsDown = -1;
-                var straightArm = 5*this.zoom;//дополнительное смещение для выпрямления руки
+                var moveArm = 5*this.zoom;//дополнительное смещение для выпрямления руки
             }
             else {
                 handsDown = 1;
-                straightArm = 0; //нет смещения для выпрямления руки
+                moveArm = 0; //нет смещения для выпрямления руки
             }
             this.ctx.moveTo(this.leftArmX, this.armY);// левая рука
             this.ctx.lineWidth = this.armWidth;
             this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - handsDown*this.armLength/2*Math.sin(Math.PI/6));
-            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4) - straightArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4) - moveArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
 
             this.ctx.moveTo(this.rightArmX, this.armY);// правая рука
             this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - handsDown*this.armLength/2*Math.sin(Math.PI/6));
-            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4) + straightArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4) + moveArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             var linearGradient_2 = this.ctx.createLinearGradient(this.leftArmX, this.armY,  // узоры на рукове
                 this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
             linearGradient_2.addColorStop(0, 'yellow');

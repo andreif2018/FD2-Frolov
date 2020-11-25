@@ -14,17 +14,24 @@ var playerView = new PlayerView(container, "player");
 var playerModel = new PlayerModel(playerView);
 var playerController = new PlayerController(playerModel, playerView);
 
+var ballView = new BallView(container);
+var ballModel = new BallModel(ballView);
+var ballController = new BallController(ballModel, ballView);
+
 var regularState = function () {
     ctx.clearRect(0, 0, container.width, container.height);
     fieldController.run();
     goalKeeperController.run();
     playerController.run();
+    ballController.run();
+
 }
 
 var goalStage = function () {
         fieldController.model.goalStage();
         goalKeeperController.model.goalStage();
         playerController.model.goalStage();
+        ballController.run();
 }
 goalStage();
 var timeout = setTimeout( () => {regularState();}, 2500);

@@ -14,8 +14,8 @@ class PlayerModel {
     goalStage = function () {
         var self = this;
         this.view.drawPlayer(true);
-        self.interval  = setInterval(() => { self.view.drawPlayer(true);}, 1)
-        setTimeout(() => {
+        self.interval  = setInterval(() => { self.view.drawPlayer(true);}, 0.05)
+        this.timeout = setTimeout(() => {
             clearInterval(self.interval);
             self.stopGoalStage();
         }, 2000);
