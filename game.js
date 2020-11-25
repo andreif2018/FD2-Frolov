@@ -3,8 +3,6 @@ class Game {
     constructor() {
         this.kickInterval = null;
         this.kickTimeout = null;
-        this.kickInterval2 = null;
-        this.kickTimeout2 = null;
         this.goalInterval = null;
         this.goalTimeout = null;
         this.container = document.getElementById("container");
@@ -45,10 +43,10 @@ class Game {
         var self = this;
         self.regularStateNoBall();
         self.ballController.kick();
-        self.kickInterval2 = requestAnimationFrame( () => {self.kickStage();});
-        self.kickTimeout2 = setTimeout(() => {
-            cancelAnimationFrame(self.kickInterval2);
-        }, 1500);
+        self.kickInterval = requestAnimationFrame( () => {self.kickStage();});
+        self.kickTimeout = setTimeout(() => {
+            cancelAnimationFrame(self.kickInterval);
+        }, 1000);
     }
 
     goalStage = function () {
@@ -73,6 +71,6 @@ class Game {
 }
 
 var g = new Game();
-//g.regularState();
+g.regularState();
 g.kickStage();
 //g.goalStage();

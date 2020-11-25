@@ -3,8 +3,6 @@
 class BallModel {
     constructor(view) {
         this.view = view;
-        this.interval = null;
-        this.timeout = null;
     }
 
     start = function () {
