@@ -10,6 +10,7 @@ class BallView {
         this.targetLineY = 200*this.zoom; // линия ворот с началом у левого края видимой части поля
         this.targetLength = 600*this.zoom; // длина ворот
         this.targetHeight = 195*this.zoom; // высота вороот
+        this.targetInternalGapY = 50*this.zoom//внутренний отступ от штанги до видимого горизонтального края сетки по Y
         this.postWidth = 14*this.zoom;// ширина линий ворот для использования в canvas
         this.rightPost = this.targetX + this.targetLength;
         this.leftPost = this.targetX;
@@ -21,6 +22,12 @@ class BallView {
         this.speedY = -14; // 12 нижний угол, 14 верхний
         this.scale = 0.005;
         this.ballRadius = 25;
+
+    }
+
+    start = function () {
+        this.ballX = 800*this.zoom; // 11 метровая отметка по x;
+        this.ballY = 580*this.zoom; // 11 метровая отметка по y
     }
 
     drawBall = function (x = this.ballX, y = this.ballY) {
@@ -40,15 +47,23 @@ class BallView {
         this.ctx.fill();
     }
 
-    ballKick = function () {
-        // правый верхний угол
+    ballUpdate = function () {
         this.ballX += this.speedX;// смещения мяча в полете по x
         this.ballY += this.speedY; // смещения мяча в полете по y
+        console.log(this.speedX, this.speedY);
+    }
+
+    ballKick = function () {
+        this.ballUpdate();
         do {
             this.ballRadius -= this.scale; }// при отдалении мяча от пользователя радиус мяча уменьшается
         while (this.ballRadius > 12);
-
         this.drawBall(this.ballX, this.ballY);
+        if (this.ballY < this.targetInternalGapY); // гол засчитан
+    }
+
+    ballInTarget = function () {
+        this.ballUpdate();
         // вылетел ли мяч правее правой штанги
         if ( this.ballX + this.ballRadius >= this.rightPost - this.postWidth/2) {
             this.speedX = -this.speedX;
@@ -64,12 +79,12 @@ class BallView {
             this.speedY = -this.speedY;
             this.ballY = this.upperPost + this.postWidth + this.ballRadius;
         }
-
-
-    }
-
-    ballInTarget = function () {
-
+        // вылетел ли мяч ниже пола
+        if ( this.ballY + this.ballRadius >= this.targetLineY - this.postWidth/2) {
+            this.speedY = -this.speedY;
+            this.ballY = this.targetLineY - this.postWidth/2 - this.ballRadius;
+        }
+        this.drawBall(this.ballX, this.ballY);
     }
 
     ballOutTarget = function () {
