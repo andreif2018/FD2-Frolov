@@ -22,6 +22,7 @@ class Game {
         this.ballView = new BallView(this.container);
         this.ballModel = new BallModel(this.ballView);
         this.ballController = new BallController(this.ballModel, this.ballView);
+        this.goal = true; // попал ли мяч в ворота
     }
 
     start = function () {
@@ -84,21 +85,36 @@ class Game {
         clearTimeout(this.goalTimeout);
     }
 
-    keyDownHandler = function (event) {
-        // if (event.key === 'ArrowUp') rightRacquetH.speedY = -3;
-        // else if (event.key === 'ArrowDown') rightRacquetH.speedY = 3;
+    createTimerPromise = function (name, result) {
+
+        return new Promise( (resolve, reject) => {
+            console.log("промис " + name + " создан, запущен...");
+            setTimeout( () => {
+                if ( this.goal ) {
+                    resolve(result);
+                    this.goalStage();
+                }
+                else reject("нет гола");
+            }, 550);
+        });
     }
 
-    keyUpHandler = function (event) {
-        //if (event.key === ' ') console.log("esc 2");
-        // if (event.key === 'ArrowUp') rightRacquetH.speedY = 0;
-        // else if (event.key === 'ArrowDown') rightRacquetH.speedY = 0;
-    }
 }
 
 var g = new Game();
-g.start();
+//g.start();
 
 //var t = setTimeout( () => {g.goalStage()}, 550);
+
+g.createTimerPromise("AAA","гол!!!")
+    .then( result => {
+            console.log("получен результат "+result);
+        }
+    )
+    .catch( error => {
+            console.log("случилась ошибка: "+error);
+        }
+    )
+;
 
 

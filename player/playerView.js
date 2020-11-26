@@ -267,9 +267,9 @@ class PlayerView {
     drawSocks = function () {
         if (this.role === "player") var color = "midnightblue";
         else color = "#2A2A17";
-        this.drawRoundedRect(this.sockX, this.sockY, this.sockWidth, this.legHeight/2, 5*this.zoom, color);
+        this.drawRoundedRect(this.sockX, this.sockY, this.sockWidth, this.legHeight/2, 20*this.zoom, color);
         // 5-radius закругления
-        this.drawRoundedRect(this.sockX + this.sockWidth + this.legGap*1.5, this.sockY, this.sockWidth, this.legHeight/2, 5*this.zoom, color);
+        this.drawRoundedRect(this.sockX + this.sockWidth + this.legGap*1.5, this.sockY, this.sockWidth, this.legHeight/2, 20*this.zoom, color);
     }
 
     drawBoots = function () {
