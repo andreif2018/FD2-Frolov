@@ -22,12 +22,16 @@ class Game {
         this.ballView = new BallView(this.container);
         this.ballModel = new BallModel(this.ballView);
         this.ballController = new BallController(this.ballModel, this.ballView);
-        this.pressSpace = document.addEventListener('keydown', (event) => {
+    }
+
+    start = function () {
+        this.regularState();
+        document.addEventListener('keydown', (event) => {
             if (event.key === ' ') {
                 console.log("kick");
                 this.kickStage();
             }
-        }, false);
+        }, {once : true});
     }
 
     regularState = function () {
@@ -47,6 +51,8 @@ class Game {
 
     kickStage = function () {
         var self = this;
+        document.removeEventListener('keydown', (event) => {
+            if (event.key === ' ') {self.kickStage();}}, false);
         self.regularStateNoBall();
         self.ballController.kick();
         self.kickInterval = requestAnimationFrame( () => {
@@ -80,10 +86,6 @@ class Game {
     }
 
     keyDownHandler = function (event) {
-        if (event.key === ' ') {
-            console.log("kick");
-            this.game.kickStage();
-        }
         // if (event.key === 'ArrowUp') rightRacquetH.speedY = -3;
         // else if (event.key === 'ArrowDown') rightRacquetH.speedY = 3;
     }
@@ -96,8 +98,7 @@ class Game {
 }
 
 var g = new Game();
-g.regularState();
-//g.kickStage();
+g.start();
 
 //var t = setTimeout( () => {g.goalStage()}, 550);
 
