@@ -8,6 +8,10 @@ class BallController {
 
     start = function () {
         this.model.start();
+    }
+
+    kick = function () {
+        this.model.kick();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowLeft') this.view.speedX = -9*this.view.zoom;
             else if (event.key === 'ArrowRight') this.view.speedX = 9*this.view.zoom;
@@ -19,10 +23,6 @@ class BallController {
             if (event.key === 'ArrowUp') this.view.speedY = -14*this.view.zoom;
             else if (event.key === 'ArrowDown') this.view.speedY = -14*this.view.zoom;
         }, false);
-    }
-
-    kick = function () {
-        this.model.kick();
     }
 
     goalStage = function () {

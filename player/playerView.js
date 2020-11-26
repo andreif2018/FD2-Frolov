@@ -47,6 +47,10 @@ class PlayerView {
         this.armLength = 25 * this.zoom * this.multiplier;
         this.rightArmX = this.bodyX + this.bodyWidth;
         this.handWidth = 14 *this.zoom * this.multiplier;
+        this.leftHandX = this.leftArmX - this.armLength*Math.cos(Math.PI/4);
+        this.leftHandY = this.armY - this.armLength*Math.sin(Math.PI/4);
+        this.rightHandX = this.rightArmX + this.armLength*Math.cos(Math.PI/4);
+        this.rightHandY = this.armY - this.armLength*Math.sin(Math.PI/4);
         this.shake = 0.75*this.zoom;
     }
 
@@ -190,13 +194,13 @@ class PlayerView {
             this.ctx.moveTo(this.leftArmX, this.armY);// левая рука
             this.ctx.lineWidth = this.armWidth;
             this.ctx.lineTo(this.leftArmX - this.armLength/2*Math.cos(Math.PI/6), this.armY - handsDown*this.armLength/2*Math.sin(Math.PI/6));
-            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4) - moveArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.leftHandX - moveArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
 
             this.ctx.moveTo(this.rightArmX, this.armY);// правая рука
             this.ctx.lineTo(this.rightArmX + this.armLength/2*Math.cos(Math.PI/6), this.armY - handsDown*this.armLength/2*Math.sin(Math.PI/6));
-            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4) + moveArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.rightHandX + moveArm, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             var linearGradient_2 = this.ctx.createLinearGradient(this.leftArmX, this.armY,  // узоры на рукове
-                this.leftArmX - this.armLength*Math.cos(Math.PI/4), this.armY - this.armLength*Math.sin(Math.PI/4));
+                this.leftHandX, this.armY - this.armLength*Math.sin(Math.PI/4));
             linearGradient_2.addColorStop(0, 'yellow');
             linearGradient_2.addColorStop(0.1, 'greenyellow');
             linearGradient_2.addColorStop(1, 'yellow');
@@ -218,14 +222,12 @@ class PlayerView {
             }
             this.ctx.strokeStyle = "white";
             this.ctx.beginPath();// левая перчатка
-            this.ctx.moveTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
-            this.ctx.lineTo(this.leftArmX - this.armLength*Math.cos(Math.PI/4),
-                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
+            this.ctx.moveTo(this.leftHandX,this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
+            this.ctx.lineTo(this.leftHandX,this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
 
-            var linearGradient_1 = this.ctx.createLinearGradient(this.leftArmX - this.armLength*Math.cos(Math.PI/4),  // градиент перчатки
+            var linearGradient_1 = this.ctx.createLinearGradient(this.leftHandX,  // градиент перчатки
                 this.armY - this.armLength*Math.sin(Math.PI/4),
-                this.leftArmX - this.armLength*Math.cos(Math.PI/4),
+                this.leftHandX,
                 this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
             linearGradient_1.addColorStop(0, 'white');
             linearGradient_1.addColorStop(0.1, 'lightgray');
@@ -233,13 +235,13 @@ class PlayerView {
             this.ctx.strokeStyle = linearGradient_1;
             this.ctx.stroke();
 
-            this.ctx.moveTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),// правая перчатка
+            this.ctx.moveTo(this.rightHandX,// правая перчатка
                 this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
-            this.ctx.lineTo(this.rightArmX + this.armLength*Math.cos(Math.PI/4),
+            this.ctx.lineTo(this.rightHandX,
                 this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
-            var linearGradient_2 = this.ctx.createLinearGradient(this.rightArmX + this.armLength*Math.cos(Math.PI/4),  // градиент перчатки
+            var linearGradient_2 = this.ctx.createLinearGradient(this.rightHandX,  // градиент перчатки
                 this.armY - this.armLength*Math.sin(Math.PI/4),
-                this.rightArmX + this.armLength*Math.cos(Math.PI/4),
+                this.rightHandX,
                 this.armY - this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
             linearGradient_2.addColorStop(0, 'white');
             linearGradient_2.addColorStop(0.1, 'lightgray');

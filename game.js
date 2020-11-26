@@ -22,7 +22,6 @@ class Game {
         this.ballView = new BallView(this.container);
         this.ballModel = new BallModel(this.ballView);
         this.ballController = new BallController(this.ballModel, this.ballView);
-        this.goal = true; // попал ли мяч в ворота
     }
 
     start = function () {
@@ -31,9 +30,17 @@ class Game {
             if (event.key === 'Shift') {
                 console.log("kick");
                 this.kickStage();
+                this.createTimerPromise("проверка гола","гол!!!")
+                    .then( result => {
+                            console.log("получен результат " + result);
+                        }
+                    )
+                    .catch( error => {
+                            console.log("случилась ошибка: " + error);
+                        }
+                    );
             }
         }, {once : true});
-        console.log(this.ballView.speedX, this.ballView.speedY);
     }
 
     regularState = function () {
@@ -58,7 +65,16 @@ class Game {
         self.kickInterval = requestAnimationFrame( () => {
             self.kickStage();
             });
-        self.kickTimeout = setTimeout(() => { cancelAnimationFrame(self.kickInterval);}, 550);//через 550 долетает до ворот
+        self.kickTimeout = setTimeout(() => {
+            cancelAnimationFrame(self.kickInterval);
+        }, 550);//через 550 долетает до ворот
+    }
+
+    isGoalState = function () {
+        return this.ballView.ballX >= this.goalKeeperView.leftHandX &&
+            this.ballView.ballX <= this.goalKeeperView.rightHandX &&
+            this.ballView.ballY >= this.goalKeeperView.leftHandY &&
+            this.ballView.ballY <= this.goalKeeperView.bootY;
     }
 
     goalStage = function () {
@@ -86,13 +102,13 @@ class Game {
     }
 
     createTimerPromise = function (name, result) {
-
+        var self = this;
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
-                if ( this.goal ) {
+                if ( !self.isGoalState() ) {
                     resolve(result);
-                    this.goalStage();
+                    self.goalStage();
                 }
                 else reject("нет гола");
             }, 550);
@@ -101,20 +117,8 @@ class Game {
 
 }
 
-var g = new Game();
-//g.start();
+var game = new Game();
+game.start();
 
-//var t = setTimeout( () => {g.goalStage()}, 550);
-
-g.createTimerPromise("AAA","гол!!!")
-    .then( result => {
-            console.log("получен результат "+result);
-        }
-    )
-    .catch( error => {
-            console.log("случилась ошибка: "+error);
-        }
-    )
-;
 
 
