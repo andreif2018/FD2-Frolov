@@ -118,7 +118,7 @@ class FieldView {
         // цикл ниже наносит вертикальные линии
         for (var k = 0; k < this.targetLength - this.targetInternalGapX; k += cellStep) {
             this.ctx.beginPath();
-            this.ctx.moveTo(leftStartPointX + k, bottomStartPointY);
+            this.ctx.moveTo(leftStartPointX + k, bottomStartPointY - cellStep);
             this.ctx.lineTo(leftStartPointX + k, this.targetLineY - this.targetHeight);
             this.ctx.stroke();
         }
@@ -127,7 +127,7 @@ class FieldView {
         if (shift === 1) gap = cellStep;
         else gap = 0;
         for (var i = -cellStep; i < this.targetLength - this.targetInternalGapX -cellStep + gap; i += cellStep) {
-            for (var j = 0; j < this.targetHeight - this.targetInternalGapY; j += cellStep) {
+            for (var j = cellStep; j < this.targetHeight - this.targetInternalGapY; j += cellStep) {
                 this.ctx.beginPath();
                 this.ctx.strokeStyle = color_2;
                 this.ctx.lineWidth = 1*this.zoom;
@@ -137,6 +137,12 @@ class FieldView {
                 this.ctx.stroke();
             }
         }
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(leftStartPointX , bottomStartPointY -20 * this.zoom);
+        this.ctx.lineTo(leftStartPointX + this.targetLength - 20 * this.zoom, bottomStartPointY - 20 * this.zoom);
+        this.ctx.strokeStyle = 'darkseagreen';
+        this.ctx.stroke();
     }
 
     drawFieldShakeGrid = function () {

@@ -45,9 +45,10 @@ class Game {
         self.ballController.kick();
         self.kickInterval = requestAnimationFrame( () => {self.kickStage();});
         self.kickTimeout = setTimeout(() => {
-            cancelAnimationFrame(self.kickInterval);
+            clearInterval(self.kickInterval);
             console.log("kick off");
-        }, 550);//550
+            //this.goalStage();
+        }, 575);//575
     }
 
     goalStage = function () {
@@ -58,12 +59,12 @@ class Game {
             self.goalKeeperController.goalStage();
             self.ballController.goalStage();
             self.playerController.goalStage();
-        }, 150)
+        }, 150) // 150
         self.goalTimeout = setTimeout(() => {
             clearInterval(self.goalInterval);
             self.stopGoalStage();
             self.regularState();
-        }, 3000);
+        }, 6000);
     }
 
     stopGoalStage = function () {

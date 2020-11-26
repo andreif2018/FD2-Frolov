@@ -22,7 +22,14 @@ class BallView {
         this.speedY = -14; // 12 нижний угол, 14 верхний
         this.scale = 0.00005;
         this.ballRadius = 20;
-
+        this.accelX = 0;
+        this.accelY = 0.5;
+            // во сколько раз теряется скорость
+        this.frictK = 0.9; // при каждом смещении
+            // во сколько раз теряется скорость
+        this.elastK = 0.8; // при отталкивании
+        this.speedInTargetX = 50; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
+        this.speedInTargetY = -100; // 12 нижний угол, 14 верхний
     }
 
     start = function () {
@@ -50,7 +57,17 @@ class BallView {
     ballUpdate = function () {
         this.ballX += this.speedX;// смещения мяча в полете по x
         this.ballY += this.speedY; // смещения мяча в полете по y
-        console.log(this.ballX, this.ballY, this.ballRadius);
+    }
+
+    ballUpdateInTarget = function () {
+        this.speedInTargetX *= this.frictK;
+        this.speedInTargetX += this.accelX;
+        this.ballX += this.speedInTargetX;// смещения мяча в полете по x
+
+        this.speedInTargetY *= this.frictK;
+        this.speedInTargetY += this.accelY;
+        this.ballY += this.speedInTargetY; // смещения мяча в полете по y
+        console.log(this.ballX, this.ballY);
     }
 
     ballKick = function () {
@@ -61,25 +78,25 @@ class BallView {
 
     ballInTarget = function () {
         this.ballRadius = 14;
-        this.ballUpdate();
+        this.ballUpdateInTarget();
         // вылетел ли мяч правее правой штанги
         if ( this.ballX + this.ballRadius >= this.rightPost - this.postWidth/2) {
-            this.speedX = -this.speedX;
+            this.speedInTargetX = -this.speedInTargetX*this.elastK;
             this.ballX = this.rightPost - this.postWidth/2 - this.ballRadius;
         }
         // вылетел ли мяч левее левой штанги
         if ( this.ballX - this.ballRadius <= this.leftPost + this.postWidth/2 ) {
-            this.speedX = -this.speedX;
+            this.speedInTargetX = -this.speedInTargetX*this.elastK;
             this.ballX = this.leftPost + this.postWidth/2 + this.ballRadius;
         }
         // вылетел ли мяч выше перекладины
         if ( this.ballY - this.ballRadius <= this.upperPost + this.postWidth/2) {
-            this.speedY = -this.speedY;
+            this.speedInTargetY = -this.speedInTargetY*this.elastK;
             this.ballY = this.upperPost + this.postWidth + this.ballRadius;
         }
         // вылетел ли мяч ниже пола
         if ( this.ballY + this.ballRadius >= this.targetLineY - this.postWidth/2) {
-            this.speedY = -this.speedY;
+            this.speedInTargetY = -this.speedInTargetY*this.elastK;
             this.ballY = this.targetLineY - this.postWidth/2 - this.ballRadius;
         }
         this.drawBall(this.ballX, this.ballY, this.ballRadius);
