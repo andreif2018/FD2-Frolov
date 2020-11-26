@@ -27,11 +27,12 @@ class Game {
     start = function () {
         this.regularState();
         document.addEventListener('keydown', (event) => {
-            if (event.key === ' ') {
+            if (event.key === 'Shift') {
                 console.log("kick");
                 this.kickStage();
             }
         }, {once : true});
+        console.log(this.ballView.speedX, this.ballView.speedY);
     }
 
     regularState = function () {
@@ -51,8 +52,6 @@ class Game {
 
     kickStage = function () {
         var self = this;
-        document.removeEventListener('keydown', (event) => {
-            if (event.key === ' ') {self.kickStage();}}, false);
         self.regularStateNoBall();
         self.ballController.kick();
         self.kickInterval = requestAnimationFrame( () => {

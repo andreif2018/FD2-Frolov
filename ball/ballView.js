@@ -18,8 +18,8 @@ class BallView {
         this.ballX = 800*this.zoom; // 11 метровая отметка по x;
         this.ballY = 580*this.zoom; // 11 метровая отметка по y
         this.img = new Image();
-        this.speedX = 0 // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
-        this.speedY = -14*this.zoom; // -12 нижний угол, -14 верхний
+        this.speedX = 0; // 7 - попадает в ворота, 8 отскакивает в штангу, 9 в штангу на вылет
+        this.speedY = -12; // 12- нижний угол, -14 верхний
         this.ballRadius = 18*this.zoom;
         this.accelX = 0.5;
         this.accelY = 0.5;
