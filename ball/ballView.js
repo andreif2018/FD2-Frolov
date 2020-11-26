@@ -20,14 +20,13 @@ class BallView {
         this.img = new Image();
         this.speedX = 7; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
         this.speedY = -14; // 12 нижний угол, 14 верхний
-        this.scale = 0.00005;
-        this.ballRadius = 20;
+        this.ballRadius = 18;
         this.accelX = 0;
         this.accelY = 0.5;
             // во сколько раз теряется скорость
-        this.frictK = 0.9; // при каждом смещении
+        this.frictK = 0.91; // при каждом смещении 0.9
             // во сколько раз теряется скорость
-        this.elastK = 0.8; // при отталкивании
+        this.elastK = 0.8; // при отталкивании 0.8
         this.speedInTargetX = 50; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
         this.speedInTargetY = -100; // 12 нижний угол, 14 верхний
     }
@@ -95,9 +94,9 @@ class BallView {
             this.ballY = this.upperPost + this.postWidth + this.ballRadius;
         }
         // вылетел ли мяч ниже пола
-        if ( this.ballY + this.ballRadius >= this.targetLineY - this.postWidth/2) {
+        if ( this.ballY + this.ballRadius >= this.targetLineY - this.postWidth) {
             this.speedInTargetY = -this.speedInTargetY*this.elastK;
-            this.ballY = this.targetLineY - this.postWidth/2 - this.ballRadius;
+            this.ballY = this.targetLineY - this.postWidth - this.ballRadius;
         }
         this.drawBall(this.ballX, this.ballY, this.ballRadius);
     }

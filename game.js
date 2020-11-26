@@ -43,28 +43,33 @@ class Game {
         var self = this;
         self.regularStateNoBall();
         self.ballController.kick();
-        self.kickInterval = requestAnimationFrame( () => {self.kickStage();});
+        self.kickInterval = requestAnimationFrame( () => {
+            self.kickStage();
+            });
         self.kickTimeout = setTimeout(() => {
-            clearInterval(self.kickInterval);
+            cancelAnimationFrame(self.kickInterval);
             console.log("kick off");
-            //this.goalStage();
-        }, 575);//575
+        }, 550);
     }
 
     goalStage = function () {
         clearTimeout(this.kickTimeout);
         var self = this;
+        self.fieldController.goalStage();
+        self.ballController.goalStage();
+        self.goalKeeperController.goalStage();
+        self.playerController.goalStage();
         self.goalInterval  = setInterval(() => {
             self.fieldController.goalStage();
-            self.goalKeeperController.goalStage();
             self.ballController.goalStage();
+            self.goalKeeperController.goalStage();
             self.playerController.goalStage();
         }, 150) // 150
         self.goalTimeout = setTimeout(() => {
             clearInterval(self.goalInterval);
             self.stopGoalStage();
             self.regularState();
-        }, 6000);
+        }, 5500); //5500
     }
 
     stopGoalStage = function () {
@@ -73,6 +78,9 @@ class Game {
 }
 
 var g = new Game();
-g.regularState();
-//g.kickStage();
-g.goalStage();
+//g.regularState();
+g.kickStage();
+
+var t = setTimeout( () => {g.goalStage()}, 550);
+
+
