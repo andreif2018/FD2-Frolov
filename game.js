@@ -22,6 +22,12 @@ class Game {
         this.ballView = new BallView(this.container);
         this.ballModel = new BallModel(this.ballView);
         this.ballController = new BallController(this.ballModel, this.ballView);
+        this.pressSpace = document.addEventListener('keydown', (event) => {
+            if (event.key === ' ') {
+                console.log("kick");
+                this.kickStage();
+            }
+        }, false);
     }
 
     regularState = function () {
@@ -46,10 +52,7 @@ class Game {
         self.kickInterval = requestAnimationFrame( () => {
             self.kickStage();
             });
-        self.kickTimeout = setTimeout(() => {
-            cancelAnimationFrame(self.kickInterval);
-            console.log("kick off");
-        }, 550);
+        self.kickTimeout = setTimeout(() => { cancelAnimationFrame(self.kickInterval);}, 550);
     }
 
     goalStage = function () {
@@ -75,12 +78,27 @@ class Game {
     stopGoalStage = function () {
         clearTimeout(this.goalTimeout);
     }
+
+    keyDownHandler = function (event) {
+        if (event.key === ' ') {
+            console.log("kick");
+            this.game.kickStage();
+        }
+        // if (event.key === 'ArrowUp') rightRacquetH.speedY = -3;
+        // else if (event.key === 'ArrowDown') rightRacquetH.speedY = 3;
+    }
+
+    keyUpHandler = function (event) {
+        //if (event.key === ' ') console.log("esc 2");
+        // if (event.key === 'ArrowUp') rightRacquetH.speedY = 0;
+        // else if (event.key === 'ArrowDown') rightRacquetH.speedY = 0;
+    }
 }
 
 var g = new Game();
-//g.regularState();
-g.kickStage();
+g.regularState();
+//g.kickStage();
 
-var t = setTimeout( () => {g.goalStage()}, 550);
+//var t = setTimeout( () => {g.goalStage()}, 550);
 
 

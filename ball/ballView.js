@@ -66,7 +66,6 @@ class BallView {
         this.speedInTargetY *= this.frictK;
         this.speedInTargetY += this.accelY;
         this.ballY += this.speedInTargetY; // смещения мяча в полете по y
-        console.log(this.ballX, this.ballY);
     }
 
     ballKick = function () {
