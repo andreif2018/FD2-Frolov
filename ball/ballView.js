@@ -18,9 +18,9 @@ class BallView {
         this.ballX = 800*this.zoom; // 11 метровая отметка по x;
         this.ballY = 580*this.zoom; // 11 метровая отметка по y
         this.img = new Image();
-        this.speedX = 7; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
-        this.speedY = -14; // 12 нижний угол, 14 верхний
-        this.ballRadius = 18;
+        this.speedX = 0 // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
+        this.speedY = -14*this.zoom; // -12 нижний угол, -14 верхний
+        this.ballRadius = 18*this.zoom;
         this.accelX = 0.5;
         this.accelY = 0.5;
             // во сколько раз теряется скорость
@@ -51,6 +51,7 @@ class BallView {
         this.ctx.fillStyle = "darkgray";
         this.ctx.ellipse(x, y, 7*this.zoom, 3*this.zoom, Math.PI/3, 0, 2*Math.PI);
         this.ctx.fill();
+        console.log(this.ballX, this.ballY);
     }
 
     ballUpdate = function () {

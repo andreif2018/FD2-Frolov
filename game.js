@@ -58,7 +58,7 @@ class Game {
         self.kickInterval = requestAnimationFrame( () => {
             self.kickStage();
             });
-        self.kickTimeout = setTimeout(() => { cancelAnimationFrame(self.kickInterval);}, 550);
+        self.kickTimeout = setTimeout(() => { cancelAnimationFrame(self.kickInterval);}, 550);//через 550 долетает до ворот
     }
 
     goalStage = function () {
