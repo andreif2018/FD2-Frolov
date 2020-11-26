@@ -46,8 +46,8 @@ class Game {
         self.kickInterval = requestAnimationFrame( () => {self.kickStage();});
         self.kickTimeout = setTimeout(() => {
             cancelAnimationFrame(self.kickInterval);
-            //self.goalStage();
-        }, 600);
+            console.log("kick off");
+        }, 550);//550
     }
 
     goalStage = function () {
@@ -72,6 +72,6 @@ class Game {
 }
 
 var g = new Game();
-//g.regularState();
+g.regularState();
 //g.kickStage();
 g.goalStage();

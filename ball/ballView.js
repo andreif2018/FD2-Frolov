@@ -20,8 +20,8 @@ class BallView {
         this.img = new Image();
         this.speedX = 7; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
         this.speedY = -14; // 12 нижний угол, 14 верхний
-        this.scale = 0.005;
-        this.ballRadius = 25;
+        this.scale = 0.00005;
+        this.ballRadius = 20;
 
     }
 
@@ -34,9 +34,9 @@ class BallView {
         // this.img.onload = () => {this.ctx.drawImage(this.img, x, y, width, height);}
         // this.img.src = 'ball/ball3.png';
         var gradient = this.ctx.createRadialGradient(x + 5*this.zoom,y - 2*this.zoom,10*this.zoom, x, y,20*this.zoom);
-        gradient.addColorStop(0, 'azure');
-        gradient.addColorStop(.1, 'ghostwhite');
-        gradient.addColorStop(.9, 'darkseagreen');
+        gradient.addColorStop(0, 'white');
+        gradient.addColorStop(.1, 'azure');
+        gradient.addColorStop(.9, 'lightgray');
         this.ctx.fillStyle = gradient;
         this.ctx.beginPath();
         this.ctx.arc(x, y, this.ballRadius, 0, Math.PI*2); // this.scale // при отдалении мяча от пользователя радиус мяча уменьшается
@@ -50,19 +50,17 @@ class BallView {
     ballUpdate = function () {
         this.ballX += this.speedX;// смещения мяча в полете по x
         this.ballY += this.speedY; // смещения мяча в полете по y
-        console.log(this.speedX, this.speedY);
+        console.log(this.ballX, this.ballY, this.ballRadius);
     }
 
     ballKick = function () {
         this.ballUpdate();
-        do {
-            this.ballRadius -= this.scale; }// при отдалении мяча от пользователя радиус мяча уменьшается
-        while (this.ballRadius > 12);
-        this.drawBall(this.ballX, this.ballY);
+        this.drawBall(this.ballX, this.ballY, this.ballRadius);
         if (this.ballY < this.targetInternalGapY); // гол засчитан
     }
 
     ballInTarget = function () {
+        this.ballRadius = 14;
         this.ballUpdate();
         // вылетел ли мяч правее правой штанги
         if ( this.ballX + this.ballRadius >= this.rightPost - this.postWidth/2) {
@@ -84,7 +82,7 @@ class BallView {
             this.speedY = -this.speedY;
             this.ballY = this.targetLineY - this.postWidth/2 - this.ballRadius;
         }
-        this.drawBall(this.ballX, this.ballY);
+        this.drawBall(this.ballX, this.ballY, this.ballRadius);
     }
 
     ballOutTarget = function () {
