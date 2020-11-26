@@ -52,6 +52,7 @@ class PlayerView {
         this.rightHandX = this.rightArmX + this.armLength*Math.cos(Math.PI/4);
         this.rightHandY = this.armY - this.armLength*Math.sin(Math.PI/4);
         this.shake = 0.75*this.zoom;
+        this.speedX = 0;
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
@@ -293,6 +294,7 @@ class PlayerView {
     }
 
     drawPlayer = function (goal) {
+        this.bodyX += this.speedX; // для смещения вратаря
         if (goal) {
             if (this.role === "player") {
                 this.shake = -this.shake;

@@ -13,4 +13,8 @@ class PlayerController {
     goalStage = function () {
         this.model.goalStage();
     }
+
+    kick = function () {
+        this.model.kickStage();
+    }
 }

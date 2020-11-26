@@ -12,4 +12,9 @@ class PlayerModel {
     goalStage = function () {
         this.view.drawPlayer(true);
     }
+
+    kickStage = function () {
+        this.view.speedX = -7;
+        this.view.drawPlayer(false);
+    }
 }

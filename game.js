@@ -54,7 +54,7 @@ class Game {
     regularStateNoBall = function () {
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
         this.fieldController.start();
-        this.goalKeeperController.start();
+        this.goalKeeperController.kick();
         this.playerController.start();
     }
 
