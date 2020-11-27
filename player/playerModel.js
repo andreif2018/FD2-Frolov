@@ -6,6 +6,7 @@ class PlayerModel {
     }
 
     start = function () {
+        this.view.angle = 1;
         this.view.drawPlayer(false);
         var randomSpeed = this.getRandomSpeedDirection();
         this.view.speedX = randomSpeed[0];
@@ -13,11 +14,14 @@ class PlayerModel {
     }
 
     goalStage = function () {
+        this.view.isKick = false;
         this.view.speedX = 0;
+        this.view.speedY = 0;
         this.view.drawPlayer(true);
     }
 
     kickStage = function () {
+        this.view.isKick = true;
         this.view.drawPlayer(false);
     }
 

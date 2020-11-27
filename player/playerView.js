@@ -32,9 +32,11 @@ class PlayerView {
         this.armWidth = 15 * this.zoom * this.multiplier;
         this.armLength = 25 * this.zoom * this.multiplier;
         this.handWidth = 14 *this.zoom * this.multiplier;
-        this.shake = 0.75*this.zoom;
-        this.speedX = 3;
-        this.speedY = 0.5;
+        this.shake = 0.75*this.zoom; // для анимации движения футболки у игрока во время гола
+        this.speedX = 3;// для смещенния вратаря
+        this.speedY = 0.5;// для смещенния вратаря
+        this.angle = 1;// для анимации перемещения ног при смещеннии вратаря
+        this.isKick = null;
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
@@ -195,14 +197,8 @@ class PlayerView {
     drawHands = function (goal = false) {
         this.ctx.lineWidth = this.handWidth;
         if (this.role !== "player") {
-            if (goal) {
-                var handsDown = -1;
-                var straightArm = 5*this.zoom;//дополнительное смещение для выпрямления руки
-            }
-            else {
-                handsDown = 1;
-                straightArm = 0; //нет смещения для выпрямления руки
-            }
+            if (goal) var handsDown = -1;
+            else handsDown = 1;
             this.ctx.strokeStyle = "white";
             this.ctx.beginPath();// левая перчатка
             this.ctx.moveTo(this.leftHandX,this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
@@ -217,9 +213,8 @@ class PlayerView {
             linearGradient_1.addColorStop(1, 'white');
             this.ctx.strokeStyle = linearGradient_1;
             this.ctx.stroke();
-
-            this.ctx.moveTo(this.rightHandX,// правая перчатка
-                this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
+            // правая перчатка
+            this.ctx.moveTo(this.rightHandX, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             this.ctx.lineTo(this.rightHandX, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
             var linearGradient_2 = this.ctx.createLinearGradient(this.rightHandX,  // градиент перчатки
                 this.handY,
@@ -259,16 +254,25 @@ class PlayerView {
     drawBoots = function () {
         this.ctx.beginPath();
         if (this.role === "player") {
-            this.ctx.ellipse(this.bootX + this.bootWidth*0.5, this.bootY, this.legWidth/2, 9*this.zoom,
+            this.ctx.ellipse(this.bootX + this.bootWidth*0.5, this.bootY, this.legWidth/2, 10*this.zoom,
                 Math.PI/2, 0, 2 * Math.PI);// левая бутса
-            this.ctx.ellipse(this.bootX + this.bootWidth*2.3, this.bootY - this.legHeight/20, this.bootWidth*0.9, 9*this.zoom,
+            this.ctx.ellipse(this.bootX + this.bootWidth*2.3, this.bootY - this.legHeight/20, this.bootWidth*0.9, 10*this.zoom,
                 3*Math.PI/4, 0, 2 * Math.PI);// правая бутса
         }
         else {
+            if (this.isKick) {
+                var d = new Date();
+                var n = d.getTime();
+                if (n%6 === 0) this.angle = -this.angle;// для анимации перемещения ног при смещеннии вратаря
+            }
+            if (this.speedX === 0 && this.speedY === 0 ) this.angle = 1; // для анимации перемещения ног при смещеннии вратаря
+            else {
+
+            }
             this.ctx.ellipse(this.bootX + this.bootWidth*0.2, this.bootY, this.legWidth, 6*this.zoom,
-                3*Math.PI/4, 0, 2 * Math.PI); // левая бутса
+                this.angle*3*Math.PI/4, 0, 2 * Math.PI); // левая бутса
             this.ctx.ellipse(this.bootX + this.bootWidth*2.3, this.bootY, this.bootWidth*0.9, 6*this.zoom,
-                Math.PI/4, 0, 2 * Math.PI); // правая бутса
+                this.angle*Math.PI/4, 0, 2 * Math.PI); // правая бутса
         }
         this.ctx.fillStyle = "#2A2A17"
         this.ctx.fill();
@@ -309,10 +313,11 @@ class PlayerView {
                 this.shake = -this.shake;
                 this.bodyY += this.shake;
             }
+            this.angle = 1;
         }
         else {
-                this.bootX += this.speedX; // для смещения вратаря
-                this.bootY += this.speedY; // для смещения вратаря
+            this.bootX += this.speedX; // для смещения вратаря
+            this.bootY += this.speedY; // для смещения вратаря
         }
         this.updatePlace();
         this.drawBoots();

@@ -72,7 +72,7 @@ class Game {
     isGoalState = function () {
         return this.ballView.ballX >= this.goalKeeperView.leftHandX &&
             this.ballView.ballX <= this.goalKeeperView.rightHandX &&
-            this.ballView.ballY >= this.goalKeeperView.leftHandY &&
+            this.ballView.ballY >= this.goalKeeperView.handY &&
             this.ballView.ballY <= this.goalKeeperView.bootY;
     }
 
