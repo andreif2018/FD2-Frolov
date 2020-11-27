@@ -23,10 +23,10 @@ class PlayerModel {
 
     getRandomSpeedDirection = function () { // возвращает случайную пару скоростей по X и Y
         var resultHash = {
-            0: [-this.view.speedX, -this.view.speedY],
-            1: [-this.view.speedX, this.view.speedY],
-            2: [this.view.speedX, -this.view.speedY],
-            3: [this.view.speedX, this.view.speedY],
+            0: [-this.view.speedX, this.view.speedY/2],
+            1: [0, 0],
+            2: [this.view.speedX, 0],
+            3: [this.view.speedX, this.view.speedY/2],
         }
         return resultHash[Math.floor(Math.random() * (3 + 1))];
     }
