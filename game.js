@@ -24,11 +24,17 @@ class Game {
         this.ballView = new BallView(this.container);
         this.ballModel = new BallModel(this.ballView);
         this.ballController = new BallController(this.ballModel, this.ballView);
-        this.ballKickSound = new Audio('ball/ball_kick.mp3');
+        this.ballKickSound = new Audio('multimedia/ballKick.mp3');
+        this.ballBlockSound = new Audio('multimedia/ballBlock.mp3');
+        this.goalSound = new Audio('multimedia/goal.mp3');
+        this.referiSound = new Audio('multimedia/referi.mp3');
+        this.gridSound = new Audio('multimedia/grid.mp3');
+        this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
     }
 
     start = function () {
         this.regularState();
+        this.referiSound.play();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
                 this.ballKickSound.play();
@@ -102,12 +108,11 @@ class Game {
         var self = this;
         self.blockStateNoBall();
         self.ballController.blockedStage();
-        self.blockInterval = setInterval( () => {
-            self.blockStateNoBall();
-            self.ballController.blockedStage();
-        }, 150);
+        self.blockInterval = requestAnimationFrame( () => {
+            self.blockedStage();
+        });
         self.blockTimeout = setTimeout(() => {
-            clearInterval(self.blockInterval);
+            cancelAnimationFrame(self.blockInterval);
         }, 3000);
     }
 
@@ -142,14 +147,18 @@ class Game {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
                 if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
+                    this.gridSound.play();
+                    this.goalSound.play();
                     resolve(result);
                     self.goalStage();
                 }
                 else if ( self.isGoalKeeperBlock() ) {
+                    this.ballBlockSound.play();
                     console.log("отбил вратарь");
                     self.blockedStage();
                 }
                 else if (self.isGoalPost()) {
+                    this.goalPostSound.play();
                     console.log("штанга/перекладина");
                     self.blockedStage();
                 }

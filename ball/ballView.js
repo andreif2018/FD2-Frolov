@@ -19,19 +19,19 @@ class BallView {
         this.ballY = 580*this.zoom; // 11 метровая отметка по y
         this.img = new Image();
         this.speedX = 0; // 7 - попадает в ворота, 8 отскакивает в штангу, 9 в штангу на вылет
-        this.speedY = -12; // 12- нижний угол, -14 верхний
+        this.speedY = -12*this.zoom; // 12- нижний угол, -14 верхний
         this.ballRadius = 18*this.zoom;
         this.accelX = 0;
         this.accelY = 0.1;
             // во сколько раз теряется скорость
-        this.frictK = 0.9; // при каждом смещении 0.9
+        this.frictK = 0.999; // при каждом смещении 0.9
             // во сколько раз теряется скорость
         this.elastK = 0.8; // при отталкивании 0.8
-        this.speedInTargetX = 50;
-        this.speedInTargetY = -100;
+        this.speedInTargetX = 25*this.zoom;
+        this.speedInTargetY = -50*this.zoom;
 
-        this.speedAfterBlockX = 50;
-        this.speedAfterBlockY = 50;
+        this.speedAfterBlockX = 10*this.zoom;
+        this.speedAfterBlockY = 5*this.zoom;
     }
 
     start = function () {
@@ -104,7 +104,6 @@ class BallView {
     ballBlocked = function () {
         this.ballUpdateAfterKick(this.speedAfterBlockX, this.speedAfterBlockY);
         this.drawBall(this.ballX, this.ballY);
-        console.log(this.ballX, this.ballY);
     }
 
 }
