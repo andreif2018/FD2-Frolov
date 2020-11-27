@@ -37,7 +37,6 @@ class Game {
         this.referiSound.play();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
-                this.ballKickSound.play();
                 this.kickStage();
                 this.IsGoalPromise("проверка гола","гол!!!")
                     .then( result => {console.log("получен результат " + result);}
@@ -143,6 +142,7 @@ class Game {
 
     IsGoalPromise = function (name, result) {
         var self = this;
+        this.ballKickSound.play();
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
@@ -167,9 +167,7 @@ class Game {
         });
     }
 }
-
 var game = new Game();
-game.start();
 
 
 
