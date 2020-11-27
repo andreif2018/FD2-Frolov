@@ -17,8 +17,8 @@ class BallModel {
         this.view.ballInTarget();
     }
 
-    outStage = function () {
-        this.view.ballOutTarget();
+    blockedStage = function () {
+        this.view.ballBlocked();
     }
 
 

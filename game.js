@@ -5,6 +5,8 @@ class Game {
         this.kickTimeout = null;
         this.goalInterval = null;
         this.goalTimeout = null;
+        this.blockInterval = null;
+        this.blockTimeout = null;
         this.container = document.getElementById("container");
         this.ctx = this.container.getContext('2d');
         this.fieldView = new FieldView(this.container);
@@ -22,21 +24,19 @@ class Game {
         this.ballView = new BallView(this.container);
         this.ballModel = new BallModel(this.ballView);
         this.ballController = new BallController(this.ballModel, this.ballView);
+        this.ballKickSound = new Audio('ball/ball_kick.mp3');
     }
 
     start = function () {
         this.regularState();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
+                this.ballKickSound.play();
                 this.kickStage();
-                this.createTimerPromise("проверка гола","гол!!!")
-                    .then( result => {
-                            console.log("получен результат " + result);
-                        }
+                this.IsGoalPromise("проверка гола","гол!!!")
+                    .then( result => {console.log("получен результат " + result);}
                     )
-                    .catch( error => {
-                            console.log("случилась ошибка: " + error);
-                        }
+                    .catch( error => {console.log("не получен результат: " + error);}
                     );
             }
         }, {once : true});
@@ -50,30 +50,28 @@ class Game {
         this.goalKeeperController.start();
     }
 
-    regularStateNoBall = function () {
+    kickStateNoBall = function () {
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
         this.fieldController.start();
         this.goalKeeperController.kick();
         this.playerController.start();
     }
 
+    blockStateNoBall = function () {
+        this.ctx.clearRect(0, 0, this.container.width, this.container.height);
+        this.fieldController.start();
+        this.goalKeeperController.start();
+        this.playerController.start();
+    }
+
     kickStage = function () {
         var self = this;
-        self.regularStateNoBall();
+        self.kickStateNoBall();
         self.ballController.kick();
-        self.kickInterval = requestAnimationFrame( () => {
-            self.kickStage();
-            });
+        self.kickInterval = requestAnimationFrame( () => { self.kickStage();});
         self.kickTimeout = setTimeout(() => {
             cancelAnimationFrame(self.kickInterval);
         }, 550);//через 550 долетает до ворот
-    }
-
-    isGoalState = function () {
-        return this.ballView.ballX >= this.goalKeeperView.leftHandX &&
-            this.ballView.ballX <= this.goalKeeperView.rightHandX &&
-            this.ballView.ballY >= this.goalKeeperView.handY &&
-            this.ballView.ballY <= this.goalKeeperView.bootY;
     }
 
     goalStage = function () {
@@ -100,20 +98,65 @@ class Game {
         clearTimeout(this.goalTimeout);
     }
 
-    createTimerPromise = function (name, result) {
+    blockedStage = function () {
+        var self = this;
+        self.blockStateNoBall();
+        self.ballController.blockedStage();
+        self.blockInterval = setInterval( () => {
+            self.blockStateNoBall();
+            self.ballController.blockedStage();
+        }, 150);
+        self.blockTimeout = setTimeout(() => {
+            clearInterval(self.blockInterval);
+        }, 3000);
+    }
+
+    isGoalKeeperBlock = function () {
+        return this.ballView.ballX + this.ballView.ballRadius >= this.goalKeeperView.leftHandX &&
+            this.ballView.ballX - this.ballView.ballRadius <= this.goalKeeperView.rightHandX &&
+            this.ballView.ballY + this.ballView.ballRadius >= this.goalKeeperView.handY &&
+            this.ballView.ballY - this.ballView.ballRadius <= this.goalKeeperView.bootY;
+    }
+
+    isInTarget = function () {
+        return this.ballView.ballX - this.ballView.ballRadius > this.fieldView.targetX + this.fieldView.targetLineWidth/2 &&
+            this.ballView.ballX + this.ballView.ballRadius < this.fieldView.targetX + this.fieldView.targetLength - this.fieldView.targetLineWidth/2 &&
+            this.ballView.ballY - this.ballView.ballRadius > this.fieldView.targetLineY - this.fieldView.targetHeight + this.fieldView.targetLineWidth/2 &&
+            this.ballView.ballY + this.ballView.ballRadius < this.fieldView.targetLineY - this.fieldView.targetLineWidth/2
+    }
+
+    isGoalPost = function () {
+        if (this.ballView.ballY + this.ballView.ballRadius < this.fieldView.targetLineY - this.fieldView.targetLineWidth/2 &&
+            this.ballView.ballY - this.ballView.ballRadius > this.fieldView.targetLineY - this.fieldView.targetHeight + this.fieldView.targetLineWidth/2)
+            if (this.ballView.ballX - this.ballView.ballRadius <= this.fieldView.targetX + this.fieldView.targetLineWidth/2 &&
+                this.ballView.ballX + this.ballView.ballRadius >= this.fieldView.targetX - this.fieldView.targetLineWidth/2) return true;
+            else if (this.ballView.ballX + this.ballView.ballRadius >= this.fieldView.targetX + this.fieldView.targetLength - this.fieldView.targetLineWidth/2 &&
+                this.ballView.ballX - this.ballView.ballRadius <= this.fieldView.targetX + this.fieldView.targetLength + this.fieldView.targetLineWidth/2) return true;
+        else return this.ballView.ballY + this.ballView.ballRadius >= this.fieldView.targetLineY - this.fieldView.targetHeight - this.fieldView.targetLineWidth/2 &&
+                    this.ballView.ballY - this.ballView.ballRadius <= this.fieldView.targetLineY - this.fieldView.targetHeight + this.fieldView.targetLineWidth/2;
+    }
+
+    IsGoalPromise = function (name, result) {
         var self = this;
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
-                if ( !self.isGoalState() ) {
+                if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
                     resolve(result);
                     self.goalStage();
+                }
+                else if ( self.isGoalKeeperBlock() ) {
+                    console.log("отбил вратарь");
+                    self.blockedStage();
+                }
+                else if (self.isGoalPost()) {
+                    console.log("штанга/перекладина");
+                    self.blockedStage();
                 }
                 else reject("нет гола");
             }, 550);
         });
     }
-
 }
 
 var game = new Game();

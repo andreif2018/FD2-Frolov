@@ -29,6 +29,9 @@ class BallView {
         this.elastK = 0.8; // при отталкивании 0.8
         this.speedInTargetX = 50; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
         this.speedInTargetY = -100; // 12 нижний угол, 14 верхний
+
+        this.speedAfterBlockX = 50;
+        this.speedAfterBlockY = 90;
     }
 
     start = function () {
@@ -37,15 +40,14 @@ class BallView {
     }
 
     drawBall = function (x = this.ballX, y = this.ballY) {
-        // this.img.onload = () => {this.ctx.drawImage(this.img, x, y, width, height);}
-        // this.img.src = 'ball/ball3.png';
+        //'ball/ball3.png';
         var gradient = this.ctx.createRadialGradient(x + 5*this.zoom,y - 2*this.zoom,10*this.zoom, x, y,20*this.zoom);
         gradient.addColorStop(0, 'white');
         gradient.addColorStop(.1, 'azure');
         gradient.addColorStop(.9, 'lightgray');
         this.ctx.fillStyle = gradient;
         this.ctx.beginPath();
-        this.ctx.arc(x, y, this.ballRadius, 0, Math.PI*2); // this.scale // при отдалении мяча от пользователя радиус мяча уменьшается
+        this.ctx.arc(x, y, this.ballRadius, 0, Math.PI*2);
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.fillStyle = "darkgray";
@@ -58,25 +60,24 @@ class BallView {
         this.ballY += this.speedY; // смещения мяча в полете по y
     }
 
-    ballUpdateInTarget = function () {
-        this.speedInTargetX *= this.frictK;
-        this.speedInTargetX += this.accelX;
-        this.ballX += this.speedInTargetX;// смещения мяча в полете по x
+    ballUpdateAfterKick = function (speedX, speedY) {
+        speedX *= this.frictK;
+        speedX += this.accelX;
+        this.ballX += speedX;// смещения мяча в полете по x
 
-        this.speedInTargetY *= this.frictK;
-        this.speedInTargetY += this.accelY;
-        this.ballY += this.speedInTargetY; // смещения мяча в полете по y
+        speedY *= this.frictK;
+        speedY += this.accelY;
+        this.ballY += speedY; // смещения мяча в полете по y
     }
 
     ballKick = function () {
         this.ballUpdate();
-        this.drawBall(this.ballX, this.ballY, this.ballRadius);
-        if (this.ballY < this.targetInternalGapY); // гол засчитан
+        this.drawBall(this.ballX, this.ballY);
     }
 
     ballInTarget = function () {
         this.ballRadius = 14;
-        this.ballUpdateInTarget();
+        this.ballUpdateAfterKick(this.speedInTargetX, this.speedInTargetY);
         // вылетел ли мяч правее правой штанги
         if ( this.ballX + this.ballRadius >= this.rightPost - this.postWidth/2) {
             this.speedInTargetX = -this.speedInTargetX*this.elastK;
@@ -97,11 +98,12 @@ class BallView {
             this.speedInTargetY = -this.speedInTargetY*this.elastK;
             this.ballY = this.targetLineY - this.postWidth - this.ballRadius;
         }
-        this.drawBall(this.ballX, this.ballY, this.ballRadius);
+        this.drawBall(this.ballX, this.ballY);
     }
 
-    ballOutTarget = function () {
-
+    ballBlocked = function () {
+        this.ballUpdateAfterKick(this.speedAfterBlockX, this.speedAfterBlockY);
+        this.drawBall(this.ballX, this.ballY);
     }
 
 }
