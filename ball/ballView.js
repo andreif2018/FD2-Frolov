@@ -21,17 +21,17 @@ class BallView {
         this.speedX = 0; // 7 - попадает в ворота, 8 отскакивает в штангу, 9 в штангу на вылет
         this.speedY = -12; // 12- нижний угол, -14 верхний
         this.ballRadius = 18*this.zoom;
-        this.accelX = 0.5;
-        this.accelY = 0.5;
+        this.accelX = 0;
+        this.accelY = 0.1;
             // во сколько раз теряется скорость
         this.frictK = 0.9; // при каждом смещении 0.9
             // во сколько раз теряется скорость
         this.elastK = 0.8; // при отталкивании 0.8
-        this.speedInTargetX = 50; // 7 - попадает в ворота, 8 отскакивает от штанги в ворота, 9 в штангу на вылет
-        this.speedInTargetY = -100; // 12 нижний угол, 14 верхний
+        this.speedInTargetX = 50;
+        this.speedInTargetY = -100;
 
         this.speedAfterBlockX = 50;
-        this.speedAfterBlockY = 90;
+        this.speedAfterBlockY = 50;
     }
 
     start = function () {
@@ -104,6 +104,7 @@ class BallView {
     ballBlocked = function () {
         this.ballUpdateAfterKick(this.speedAfterBlockX, this.speedAfterBlockY);
         this.drawBall(this.ballX, this.ballY);
+        console.log(this.ballX, this.ballY);
     }
 
 }
