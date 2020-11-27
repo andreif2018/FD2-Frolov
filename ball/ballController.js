@@ -17,7 +17,6 @@ class BallController {
             else if (event.key === 'ArrowRight') this.view.speedX = 9*this.view.zoom;
             if (event.key === 'ArrowUp') this.view.speedY = -15*this.view.zoom;
             else if (event.key === 'ArrowDown') this.view.speedY = -12*this.view.zoom;
-            console.log(this.view.speedX, this.view.speedY);
         }, false);
         document.addEventListener('keyup', (event) => {
             if (event.key === 'ArrowUp') this.view.speedY = -14*this.view.zoom;

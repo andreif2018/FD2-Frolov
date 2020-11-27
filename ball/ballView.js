@@ -51,7 +51,6 @@ class BallView {
         this.ctx.fillStyle = "darkgray";
         this.ctx.ellipse(x, y, 7*this.zoom, 3*this.zoom, Math.PI/3, 0, 2*Math.PI);
         this.ctx.fill();
-        console.log(this.ballX, this.ballY);
     }
 
     ballUpdate = function () {

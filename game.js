@@ -28,7 +28,6 @@ class Game {
         this.regularState();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
-                console.log("kick");
                 this.kickStage();
                 this.createTimerPromise("проверка гола","гол!!!")
                     .then( result => {

@@ -10,6 +10,7 @@ class PlayerModel {
     }
 
     goalStage = function () {
+        this.view.speedX = 0;
         this.view.drawPlayer(true);
     }
 
