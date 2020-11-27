@@ -7,6 +7,9 @@ class PlayerModel {
 
     start = function () {
         this.view.drawPlayer(false);
+        var randomSpeed = this.getRandomSpeedDirection();
+        this.view.speedX = randomSpeed[0];
+        this.view.speedY = randomSpeed[1];
     }
 
     goalStage = function () {
@@ -15,7 +18,16 @@ class PlayerModel {
     }
 
     kickStage = function () {
-        this.view.speedX = -7;
         this.view.drawPlayer(false);
+    }
+
+    getRandomSpeedDirection = function () { // возвращает случайную пару скоростей по X и Y
+        var resultHash = {
+            0: [-this.view.speedX, -this.view.speedY],
+            1: [-this.view.speedX, this.view.speedY],
+            2: [this.view.speedX, -this.view.speedY],
+            3: [this.view.speedX, this.view.speedY],
+        }
+        return resultHash[Math.floor(Math.random() * (3 + 1))];
     }
 }

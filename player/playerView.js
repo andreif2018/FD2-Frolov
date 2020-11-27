@@ -24,26 +24,36 @@ class PlayerView {
         }
         this.neckWidth = 15*this.zoom * this.multiplier;
         this.neckHeight = 5*this.zoom * this.multiplier;
+        this.neckX = this.bodyX + this.bodyWidth/2;
         this.neckY = this.bodyY - this.neckHeight;
         this.headWidth = 25*this.zoom * this.multiplier;
         this.headHeight = 10*this.zoom * this.multiplier;
+        this.headX = this.bodyX + this.bodyWidth/2;
         this.headY = this.neckY - this.headHeight;
+        this.boxerX = this.bodyX;
         this.boxerY = this.bodyY + this.bodyHeight - this.zoom*9;
         this.boxerWidth = this.bodyWidth;
+        this.legX = this.bodyX + this.zoom*2;
         this.legY = this.bodyY + 0.1 * this.legHeight + this.bodyHeight;
+        this.sockX = this.bodyX + this.zoom*2;
         this.sockY = this.bodyY + 0.5*this.legHeight + this.bodyHeight;
         this.sockWidth = this.legWidth*0.9;
+        this.bootX = this.bodyX + this.zoom*2;
         this.bootY = this.bodyY + this.legHeight + this.bodyHeight;
         this.bootWidth = this.legWidth*0.9;
+        this.leftArmX = this.bodyX;
         this.armY = this.bodyY + this.zoom*2;
+        this.rightArmX = this.bodyX + this.bodyWidth;
         this.armWidth = 15 * this.zoom * this.multiplier;
         this.armLength = 25 * this.zoom * this.multiplier;
-        this.rightArmX = this.bodyX + this.bodyWidth;
         this.handWidth = 14 *this.zoom * this.multiplier;
+        this.leftHandX = this.leftArmX - this.armLength*Math.cos(Math.PI/4);
         this.leftHandY = this.armY - this.armLength*Math.sin(Math.PI/4);
+        this.rightHandX = this.rightArmX + this.armLength*Math.cos(Math.PI/4);
         this.rightHandY = this.armY - this.armLength*Math.sin(Math.PI/4);
         this.shake = 0.75*this.zoom;
-        this.speedX = 0;
+        this.speedX = 0;//3
+        this.speedY = 1;//3
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
@@ -284,20 +294,6 @@ class PlayerView {
         this.ctx.fill();
     }
 
-    updatePlace = function () {
-        this.bodyX += this.speedX; // для смещения вратаря
-        this.neckX = this.bodyX + this.bodyWidth/2;
-        this.headX = this.bodyX + this.bodyWidth/2;
-        this.boxerX = this.bodyX;
-        this.legX = this.bodyX + this.zoom*2;
-        this.sockX = this.bodyX + this.zoom*2;
-        this.bootX = this.bodyX + this.zoom*2;
-        this.leftArmX = this.bodyX;
-        this.rightArmX = this.bodyX + this.bodyWidth;
-        this.leftHandX = this.leftArmX - this.armLength*Math.cos(Math.PI/4);
-        this.rightHandX = this.rightArmX + this.armLength*Math.cos(Math.PI/4);
-    }
-
     drawPlayer = function (goal) {
         if (goal) {
             if (this.role === "player") {
@@ -306,11 +302,10 @@ class PlayerView {
             }
         }
         else {
-            if (this.role === "player") {
-                this.bodyY = 475*this.zoom;
+            if (this.role === "player") this.bodyY = 475*this.zoom;
+            else {
+                this.bootY += this.speedY; // для смещения вратаря
             }
-            this.bodyX += this.speedX; // для смещения вратаря
-            this.updatePlace();
         }
         this.drawBoots();
         this.drawSocks();
