@@ -10,7 +10,7 @@ body {
 }
 .grid-item {
     padding: 20px;
-    align-self: auto;
+    //align-self: auto;
 }
 .Menu {
     background-color: gray;
@@ -28,4 +28,12 @@ input[type="button"] {
 }
 .Score {
     white-space: nowrap;
+}
+
+input[type="button"]:focus {
+    outline: none;
+}
+
+input#sound {
+    width: 4em;
 }

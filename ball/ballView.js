@@ -38,7 +38,6 @@ class BallView {
     }
 
     drawBall = function (x = this.ballX, y = this.ballY) {
-        //'ball/ball3.png';
         var gradient = this.ctx.createRadialGradient(x + 5*this.zoom,y - 2*this.zoom,10*this.zoom, x, y,20*this.zoom);
         gradient.addColorStop(0, 'white');
         gradient.addColorStop(.1, 'azure');

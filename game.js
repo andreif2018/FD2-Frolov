@@ -30,11 +30,23 @@ class Game {
         this.referiSound = new Audio('multimedia/referi.mp3');
         this.gridSound = new Audio('multimedia/grid.mp3');
         this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
+        this.sound = true;
+    }
+
+    setMute = function () {
+        if (this.sound) {
+            this.sound = false;
+            document.getElementById("sound").setAttribute("value", "Unmute");
+        }
+        else {
+            this.sound = true;
+            document.getElementById("sound").setAttribute("value", "Mute");
+        }
     }
 
     start = function () {
         this.regularState();
-        this.referiSound.play();
+        if (this.sound) this.referiSound.play();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
                 this.kickStage();
@@ -142,23 +154,23 @@ class Game {
 
     IsGoalPromise = function (name, result) {
         var self = this;
-        this.ballKickSound.play();
+        if (this.sound) this.ballKickSound.play();
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
                 if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
-                    this.gridSound.play();
-                    this.goalSound.play();
+                    if (this.sound) this.gridSound.play();
+                    if (this.sound) this.goalSound.play();
                     resolve(result);
                     self.goalStage();
                 }
                 else if ( self.isGoalKeeperBlock() ) {
-                    this.ballBlockSound.play();
+                    if (this.sound) this.ballBlockSound.play();
                     console.log("отбил вратарь");
                     self.blockedStage();
                 }
                 else if (self.isGoalPost()) {
-                    this.goalPostSound.play();
+                    if (this.sound) this.goalPostSound.play();
                     console.log("штанга/перекладина");
                     self.blockedStage();
                 }
