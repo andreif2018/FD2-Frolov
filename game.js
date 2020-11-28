@@ -34,7 +34,6 @@ class Game {
         this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
         this.finishSound = new Audio('multimedia/finishSound.mp3');
         this.sound = true;
-        this.roundCounter = 0;
         this.popupInfo = document.getElementById("result");
     }
 
@@ -62,7 +61,8 @@ class Game {
     playGame = function () {
         clearTimeout(this.popupTimeout);
         this.popupInfo.className = "NotShown";
-        if (this.roundCounter < 1) {
+        if (this.roundCounter < 5) { // игра в пять раундов
+            this.updateRound();
             this.regularState();
             if (this.sound) this.referiSound.play();
             document.addEventListener('keydown', (event) => {
@@ -253,6 +253,10 @@ class Game {
     updateScore = function () {
         document.getElementById("playerScore").textContent = this.playerScore;
         document.getElementById("computerScore").textContent = this.computerScore;
+    }
+
+    updateRound = function () {
+        document.getElementById("round").textContent = this.roundCounter + 1 + "/5";
     }
 
     updatePosAndSkew = function () {
