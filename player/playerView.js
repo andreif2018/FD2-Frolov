@@ -39,6 +39,17 @@ class PlayerView {
         this.isKick = null;
     }
 
+    start = function () {
+        if (this.role === "player") {
+            this.bootX = 800*this.zoom + this.zoom*2 - 2*this.bodyWidth;//центр ворот
+            this.bootY = 475*this.zoom + this.legHeight + this.bodyHeight;
+        }
+        else {
+            this.bootX = 800*this.zoom - this.bodyWidth/2 + this.zoom*2;//центр ворот
+            this.bootY = this.targetLineY;
+        }
+    }
+
     drawRoundedRect = function (x , y, width, height, radius, color) {
         if (width < 2 * radius) radius = width / 2;
         if (height < 2 * radius) radius = height / 2;

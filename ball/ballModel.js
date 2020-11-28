@@ -6,6 +6,7 @@ class BallModel {
     }
 
     start = function () {
+        this.view.start();
         this.view.drawBall();
     }
 

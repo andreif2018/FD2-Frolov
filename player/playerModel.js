@@ -6,6 +6,7 @@ class PlayerModel {
     }
 
     start = function () {
+        this.view.start();
         this.view.angle = 1;
         this.view.drawPlayer(false);
         var randomSpeed = this.getRandomSpeedDirection();

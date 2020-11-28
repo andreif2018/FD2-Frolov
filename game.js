@@ -31,6 +31,11 @@ class Game {
         this.gridSound = new Audio('multimedia/grid.mp3');
         this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
         this.sound = true;
+        this.roundCounter = 0;
+    }
+    init = function () {
+        this.roundCounter = 0;
+        this.play();
     }
 
     setMute = function () {
@@ -44,19 +49,20 @@ class Game {
         }
     }
 
-    start = function () {
+    play = function () {
         this.regularState();
         if (this.sound) this.referiSound.play();
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
                 this.kickStage();
-                this.IsGoalPromise("проверка гола","гол!!!")
+                this.IsGoalPromise("проверка гола","закончился раунд ")
                     .then( result => {console.log("получен результат " + result);}
                     )
                     .catch( error => {console.log("не получен результат: " + error);}
                     );
             }
-        }, {once : true});
+        }, {once: true});
+        console.log(this.roundCounter);
     }
 
     regularState = function () {
@@ -85,7 +91,9 @@ class Game {
         var self = this;
         self.kickStateNoBall();
         self.ballController.kick();
-        self.kickInterval = requestAnimationFrame( () => { self.kickStage();});
+        self.kickInterval = requestAnimationFrame( () => {
+            self.kickStage();
+        });
         self.kickTimeout = setTimeout(() => {
             cancelAnimationFrame(self.kickInterval);
         }, 550);//через 550 долетает до ворот
@@ -107,12 +115,16 @@ class Game {
         self.goalTimeout = setTimeout(() => {
             clearInterval(self.goalInterval);
             self.stopGoalStage();
-            self.regularState();
         }, 5500); //5500
     }
 
     stopGoalStage = function () {
         clearTimeout(this.goalTimeout);
+        this.roundCounter += 1;
+        this.ctx.clearRect(0, 0, this.container.width, this.container.height);
+        if (this.roundCounter < 5) {
+            this.play();
+        }
     }
 
     blockedStage = function () {
@@ -124,7 +136,17 @@ class Game {
         });
         self.blockTimeout = setTimeout(() => {
             cancelAnimationFrame(self.blockInterval);
+            self.stopBlockStage();
         }, 3000);
+    }
+
+    stopBlockStage = function () {
+        clearTimeout(this.blockTimeout);
+        this.roundCounter += 1;
+        this.ctx.clearRect(0, 0, this.container.width, this.container.height);
+        if (this.roundCounter < 6) {
+            this.play();
+        }
     }
 
     isGoalKeeperBlock = function () {
@@ -161,18 +183,21 @@ class Game {
                 if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
                     if (this.sound) this.gridSound.play();
                     if (this.sound) this.goalSound.play();
-                    resolve(result);
                     self.goalStage();
+                    console.log("гол!!!");
+                    resolve(result);
                 }
-                else if ( self.isGoalKeeperBlock() ) {
-                    if (this.sound) this.ballBlockSound.play();
+                else if (this.sound) {
+                    this.ballBlockSound.play();
                     console.log("отбил вратарь");
                     self.blockedStage();
+                    resolve(result);
                 }
                 else if (self.isGoalPost()) {
                     if (this.sound) this.goalPostSound.play();
                     console.log("штанга/перекладина");
                     self.blockedStage();
+                    resolve(result);
                 }
                 else reject("нет гола");
             }, 550);
