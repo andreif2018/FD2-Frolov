@@ -54,6 +54,7 @@ class Game {
         if (this.roundCounter < 5 && this.ongoing !== true) {
             this.ongoing = true;
             this.regularState();
+            console.log("start");
             if (this.sound) this.referiSound.play();
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Shift') {
@@ -74,7 +75,7 @@ class Game {
                         .catch( error => {console.log( error);}
                         );
                 }
-            }, false);
+            }, {once: true});
             console.log(this.roundCounter);
         }
     }
