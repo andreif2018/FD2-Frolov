@@ -55,13 +55,23 @@ class Game {
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Shift') {
                 this.kickStage();
-                this.IsGoalPromise("проверка гола","закончился раунд ")
+                this.IsGoalPromise("проверка гола","гол!!!")
                     .then( result => {console.log("получен результат " + result);}
                     )
-                    .catch( error => {console.log("не получен результат: " + error);}
+                    .catch( error => {console.log(error);}
+                    );
+                this.IsGoalPostPromise("попал ли в штангу/перекладину","штанга/перекладина")
+                    .then( result => {console.log("получен результат " + result);}
+                    )
+                    .catch( error => {console.log( error);}
+                    );
+                this.IsGoalKeeperBlockPromise("отбил ли вратарь","вратарь отбил")
+                    .then( result => {console.log("получен результат " + result);}
+                    )
+                    .catch( error => {console.log( error);}
                     );
             }
-        }, {once: true});
+        }, false);
         console.log(this.roundCounter);
     }
 
@@ -181,25 +191,44 @@ class Game {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
                 if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
-                    if (this.sound) this.gridSound.play();
-                    if (this.sound) this.goalSound.play();
+                    if (this.sound) {
+                        this.gridSound.play();
+                        this.goalSound.play();
+                    }
                     self.goalStage();
-                    console.log("гол!!!");
-                    resolve(result);
-                }
-                else if (this.sound) {
-                    this.ballBlockSound.play();
-                    console.log("отбил вратарь");
-                    self.blockedStage();
-                    resolve(result);
-                }
-                else if (self.isGoalPost()) {
-                    if (this.sound) this.goalPostSound.play();
-                    console.log("штанга/перекладина");
-                    self.blockedStage();
                     resolve(result);
                 }
                 else reject("нет гола");
+            }, 550);
+        });
+    }
+    IsGoalPostPromise = function (name, result) {
+        var self = this;
+        if (this.sound) this.ballKickSound.play();
+        return new Promise( (resolve, reject) => {
+            console.log("промис " + name + " создан, запущен...");
+            setTimeout( () => {
+                if (self.isGoalPost()) {
+                    if (this.sound) this.goalPostSound.play();
+                    self.blockedStage();
+                    resolve(result);
+                }
+                else reject("не попал в штангу");
+            }, 550);
+        });
+    }
+    IsGoalKeeperBlockPromise = function (name, result) {
+        var self = this;
+        if (this.sound) this.ballKickSound.play();
+        return new Promise( (resolve, reject) => {
+            console.log("промис " + name + " создан, запущен...");
+            setTimeout( () => {
+                if (self.isGoalKeeperBlock()) {
+                    if (this.sound) this.ballBlockSound.play();
+                    self.blockedStage();
+                    resolve(result);
+                }
+                else reject("вратарь не отбил");
             }, 550);
         });
     }

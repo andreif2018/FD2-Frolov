@@ -14,14 +14,6 @@ class PlayerView {
         this.legHeight = 65 * this.zoom * this.multiplier;
         this.bodyWidth = 40 * this.zoom * this.multiplier;
         this.bodyHeight = 50 * this.zoom * this.multiplier;
-        if (this.role === "player") {
-            this.bootX = 800*this.zoom + this.zoom*2 - 2*this.bodyWidth;//центр ворот
-            this.bootY = 475*this.zoom + this.legHeight + this.bodyHeight;
-        }
-        else {
-            this.bootX = 800*this.zoom - this.bodyWidth/2 + this.zoom*2;//центр ворот
-            this.bootY = this.targetLineY;
-        }
         this.neckWidth = 15*this.zoom * this.multiplier;
         this.neckHeight = 5*this.zoom * this.multiplier;
         this.headWidth = 25*this.zoom * this.multiplier;
