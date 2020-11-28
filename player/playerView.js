@@ -37,8 +37,8 @@ class PlayerView {
             this.bootX = 800*this.zoom - this.bodyWidth/2 + this.zoom*2;//центр ворот
             this.bootY = this.targetLineY;
         }
-        this.speedX = 3;// для смещенния вратаря
-        this.speedY = 0.5;// для смещенния вратаря
+        this.speedX = 3*this.zoom;// для смещенния вратаря
+        this.speedY = 0.5*this.zoom;// для смещенния вратаря
         this.angle = 1;// для анимации перемещения ног при смещеннии вратаря
     }
 
@@ -316,7 +316,7 @@ class PlayerView {
                 this.shake = -this.shake;
                 this.bodyY += this.shake;
             }
-            this.angle = 1;
+            this.angle = 1;// для анимации перемещения ног при смещеннии вратаря
         }
         else {
             this.bootX += this.speedX; // для смещения вратаря
