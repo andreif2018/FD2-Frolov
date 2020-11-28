@@ -17,6 +17,7 @@ class BallView {
         this.upperPost = this.targetLineY - this.targetHeight;
         this.accelX = 0;
         this.accelY = 0.1;
+
         this.frictK = 0.9; // во сколько раз теряется скорость при каждом смещении 0.9
         this.elastK = 0.8; // при отталкивании во сколько раз теряется скорост 0.8
         this.speedInTargetX = 25*this.zoom;

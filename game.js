@@ -30,8 +30,10 @@ class Game {
         this.referiSound = new Audio('multimedia/referi.mp3');
         this.gridSound = new Audio('multimedia/grid.mp3');
         this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
+        this.finishSound = new Audio('multimedia/finishSound.mp3');
         this.sound = true;
         this.roundCounter = 0;
+        this.resultPopup = document.getElementById("result");
     }
     init = function () {
         this.roundCounter = 0;
@@ -39,6 +41,7 @@ class Game {
         this.playerScore = 0;
         this.computerScore = 0;
         this.updateScore();
+        this.resultPopup.className = "NotShown";
     }
 
     setMute = function () {
@@ -77,6 +80,7 @@ class Game {
                 }
             }, {once: true});
         }
+        else this.updateResult();// выводит финальный результат
     }
 
     regularState = function () {
@@ -129,7 +133,7 @@ class Game {
         self.goalTimeout = setTimeout(() => {
             clearInterval(self.goalInterval);
             self.stopGoalStage();
-        }, 5500); //5500
+        }, 4000); //5500
     }
 
     stopGoalStage = function () {
@@ -194,7 +198,7 @@ class Game {
                     if (self.sound) {
                         self.gridSound.play();
                         self.goalSound.play();
-                        setTimeout(() =>{self.goalSound.pause();}, 5500);
+                        setTimeout(() =>{self.goalSound.pause();}, 4000);
                     }
                     self.goalStage();
                     self.playerScore += 1;
@@ -241,9 +245,16 @@ class Game {
     }
 
     updateScore = function () {
-        console.log(this.playerScore, this.computerScore)
         document.getElementById("playerScore").textContent = this.playerScore;
         document.getElementById("computerScore").textContent = this.computerScore;
+    }
+
+    updateResult = function () {
+        this.finishSound.play();
+        setTimeout(() =>{this.finishSound.pause();}, 2000);
+        if (this.playerScore > this.computerScore) this.resultPopup.innerText = "Game Over \n You won";
+        else this.resultPopup.innerText = "Game Over \n Computer won";
+        this.resultPopup.className = "Shown";
     }
 }
 var game = new Game();
