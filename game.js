@@ -36,6 +36,9 @@ class Game {
     init = function () {
         this.roundCounter = 0;
         this.playGame();
+        this.playerScore = 0;
+        this.computerScore = 0;
+        this.updateScore();
     }
 
     setMute = function () {
@@ -52,7 +55,6 @@ class Game {
     playGame = function () {
         if (this.roundCounter < 5) {
             this.regularState();
-            console.log("start");
             if (this.sound) this.referiSound.play();
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Shift') {
@@ -74,7 +76,6 @@ class Game {
                         );
                 }
             }, {once: true});
-            console.log(this.roundCounter);
         }
     }
 
@@ -190,11 +191,14 @@ class Game {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
                 if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
-                    if (this.sound) {
-                        this.gridSound.play();
-                        this.goalSound.play();
+                    if (self.sound) {
+                        self.gridSound.play();
+                        self.goalSound.play();
+                        setTimeout(() =>{self.goalSound.pause();}, 5500);
                     }
                     self.goalStage();
+                    self.playerScore += 1;
+                    self.updateScore();
                     resolve(result);
                 }
                 else reject("нет гола");
@@ -208,8 +212,10 @@ class Game {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
                 if (self.isGoalPost()) {
-                    if (this.sound) this.goalPostSound.play();
+                    if (self.sound) self.goalPostSound.play();
                     self.blockedStage();
+                    self.computerScore += 1;
+                    self.updateScore();
                     resolve(result);
                 }
                 else reject("не попал в штангу");
@@ -223,8 +229,10 @@ class Game {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
                 if (self.isGoalKeeperBlock()) {
-                    if (this.sound) this.ballBlockSound.play();
+                    if (self.sound) self.ballBlockSound.play();
                     self.blockedStage();
+                    self.computerScore += 1;
+                    self.updateScore();
                     resolve(result);
                 }
                 else reject("вратарь не отбил");
@@ -233,7 +241,9 @@ class Game {
     }
 
     updateScore = function () {
-
+        console.log(this.playerScore, this.computerScore)
+        document.getElementById("playerScore").textContent = this.playerScore;
+        document.getElementById("computerScore").textContent = this.computerScore;
     }
 }
 var game = new Game();
