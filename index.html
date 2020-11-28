@@ -47,9 +47,9 @@ maximum-scale=1.0">
             var URLHash = window.location.hash;
             var stateJSON = decodeURIComponent(URLHash.substr(1));
             if ( stateJSON!== "" )
-                SPAState = JSON.parse(stateJSON); // если JSON непустой, читаем из него состояние и отображаем
+                SPAState = JSON.parse(stateJSON);
             else
-                SPAState = {pageName:'Main'}; // иначе показываем главную страницу
+                SPAState = {pageName:'Main'};
             var popupHTML = "";
             switch ( SPAState.pageName ) {
                 case 'Main':

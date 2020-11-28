@@ -10,8 +10,8 @@ class PlayerModel {
         this.view.angle = 1;
         this.view.drawPlayer(false);
         if (this.view.role === "player") {
-            this.view.speedX = 0.01;
-            this.view.speedY = 0.01;
+            this.view.speedX = 0;
+            this.view.speedY = 0;
         }
         else {
             var randomSpeed = this.getRandomSpeedDirection();

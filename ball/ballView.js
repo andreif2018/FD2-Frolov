@@ -17,13 +17,8 @@ class BallView {
         this.upperPost = this.targetLineY - this.targetHeight;
         this.accelX = 0;
         this.accelY = 0.1;
-
         this.frictK = 0.9; // во сколько раз теряется скорость при каждом смещении 0.9
         this.elastK = 0.8; // при отталкивании во сколько раз теряется скорост 0.8
-        this.speedInTargetX = 25*this.zoom;
-        this.speedInTargetY = -50*this.zoom;
-        this.speedAfterBlockX = 15*this.zoom; // скорость при отскоке мяча от вратаря либо штанги
-        this.speedAfterBlockY = -5*this.zoom;
     }
 
     start = function () {
@@ -32,6 +27,10 @@ class BallView {
         this.ballRadius = 18*this.zoom;
         this.speedX = 0;
         this.speedY = -14*this.zoom;// 12- нижний угол, -14 верхний
+        this.speedInTargetX = 50*this.zoom;
+        this.speedInTargetY = -100*this.zoom;
+        this.speedAfterBlockX = 15*this.zoom; // скорость при отскоке мяча от вратаря либо штанги
+        this.speedAfterBlockY = -5*this.zoom;
     }
 
     drawBall = function (x = this.ballX, y = this.ballY) {

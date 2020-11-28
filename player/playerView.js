@@ -25,9 +25,6 @@ class PlayerView {
         this.armLength = 25 * this.zoom * this.multiplier;
         this.handWidth = 14 *this.zoom * this.multiplier;
         this.shake = 0.75*this.zoom; // для анимации движения футболки у игрока во время гола
-        this.speedX = 3;// для смещенния вратаря
-        this.speedY = 0.5;// для смещенния вратаря
-        this.angle = 1;// для анимации перемещения ног при смещеннии вратаря
         this.isKick = null;
     }
 
@@ -40,6 +37,9 @@ class PlayerView {
             this.bootX = 800*this.zoom - this.bodyWidth/2 + this.zoom*2;//центр ворот
             this.bootY = this.targetLineY;
         }
+        this.speedX = 3;// для смещенния вратаря
+        this.speedY = 0.5;// для смещенния вратаря
+        this.angle = 1;// для анимации перемещения ног при смещеннии вратаря
     }
 
     drawRoundedRect = function (x , y, width, height, radius, color) {
