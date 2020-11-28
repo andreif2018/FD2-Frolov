@@ -32,10 +32,11 @@ class Game {
         this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
         this.sound = true;
         this.roundCounter = 0;
+        this.ongoing = false;
     }
     init = function () {
         this.roundCounter = 0;
-        this.play();
+        this.playGame();
     }
 
     setMute = function () {
@@ -49,30 +50,33 @@ class Game {
         }
     }
 
-    play = function () {
-        this.regularState();
-        if (this.sound) this.referiSound.play();
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Shift') {
-                this.kickStage();
-                this.IsGoalPromise("проверка гола","гол!!!")
-                    .then( result => {console.log("получен результат " + result);}
-                    )
-                    .catch( error => {console.log(error);}
-                    );
-                this.IsGoalPostPromise("попал ли в штангу/перекладину","штанга/перекладина")
-                    .then( result => {console.log("получен результат " + result);}
-                    )
-                    .catch( error => {console.log( error);}
-                    );
-                this.IsGoalKeeperBlockPromise("отбил ли вратарь","вратарь отбил")
-                    .then( result => {console.log("получен результат " + result);}
-                    )
-                    .catch( error => {console.log( error);}
-                    );
-            }
-        }, false);
-        console.log(this.roundCounter);
+    playGame = function () {
+        if (this.roundCounter < 5 && this.ongoing !== true) {
+            this.ongoing = true;
+            this.regularState();
+            if (this.sound) this.referiSound.play();
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Shift') {
+                    this.kickStage();
+                    this.IsGoalPromise("проверка гола","гол!!!")
+                        .then( result => {console.log("получен результат " + result);}
+                        )
+                        .catch( error => {console.log(error);}
+                        );
+                    this.IsGoalPostPromise("попал ли в штангу/перекладину","штанга/перекладина")
+                        .then( result => {console.log("получен результат " + result);}
+                        )
+                        .catch( error => {console.log( error);}
+                        );
+                    this.IsGoalKeeperBlockPromise("отбил ли вратарь","вратарь отбил")
+                        .then( result => {console.log("получен результат " + result);}
+                        )
+                        .catch( error => {console.log( error);}
+                        );
+                }
+            }, false);
+            console.log(this.roundCounter);
+        }
     }
 
     regularState = function () {
@@ -98,6 +102,7 @@ class Game {
     }
 
     kickStage = function () {
+        console.log(this.ballView.speedX, this.ballView.speedY);
         var self = this;
         self.kickStateNoBall();
         self.ballController.kick();
@@ -129,34 +134,32 @@ class Game {
     }
 
     stopGoalStage = function () {
+        this.ongoing = false;
         clearTimeout(this.goalTimeout);
         this.roundCounter += 1;
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
-        if (this.roundCounter < 5) {
-            this.play();
-        }
+        this.playGame();
     }
 
     blockedStage = function () {
         var self = this;
         self.blockStateNoBall();
         self.ballController.blockedStage();
-        self.blockInterval = requestAnimationFrame( () => {
-            self.blockedStage();
-        });
+        self.blockInterval = setInterval( () => {
+            self.blockStateNoBall();
+            self.ballController.blockedStage();
+        }, 12);
         self.blockTimeout = setTimeout(() => {
-            cancelAnimationFrame(self.blockInterval);
+            clearInterval(self.blockInterval);
             self.stopBlockStage();
-        }, 3000);
+        }, 2000);
     }
-
     stopBlockStage = function () {
+        this.ongoing = false;
         clearTimeout(this.blockTimeout);
         this.roundCounter += 1;
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
-        if (this.roundCounter < 6) {
-            this.play();
-        }
+        this.playGame();
     }
 
     isGoalKeeperBlock = function () {
