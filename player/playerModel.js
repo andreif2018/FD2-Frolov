@@ -9,9 +9,11 @@ class PlayerModel {
         this.view.start();
         this.view.angle = 1;
         this.view.drawPlayer(false);
-        var randomSpeed = this.getRandomSpeedDirection();
-        this.view.speedX = randomSpeed[0];
-        this.view.speedY = randomSpeed[1];
+        if (this.view.role !== "player") {
+            var randomSpeed = this.getRandomSpeedDirection();
+            this.view.speedX = randomSpeed[0];
+            this.view.speedY = randomSpeed[1];
+        }
     }
 
     goalStage = function () {
@@ -26,12 +28,19 @@ class PlayerModel {
         this.view.drawPlayer(false);
     }
 
+    blockStage = function () {
+        this.view.isKick = false;
+        this.view.speedX = 0;
+        this.view.speedY = 0;
+        this.view.drawPlayer(false);
+    }
+
     getRandomSpeedDirection = function () { // возвращает случайную пару скоростей по X и Y
         var resultHash = {
-            0: [-this.view.speedX, this.view.speedY/2],
+            0: [-3, 0.5/2],
             1: [0, 0],
-            2: [this.view.speedX, 0],
-            3: [this.view.speedX, this.view.speedY/2],
+            2: [3, 0],
+            3: [3, 0.5/2],
         }
         return resultHash[Math.floor(Math.random() * (3 + 1))];
     }

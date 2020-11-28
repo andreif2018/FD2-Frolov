@@ -17,4 +17,8 @@ class PlayerController {
     kick = function () {
         this.model.kickStage();
     }
+
+    blockStage = function () {
+        this.model.blockStage();
+    }
 }

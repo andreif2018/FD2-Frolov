@@ -32,7 +32,6 @@ class Game {
         this.goalPostSound = new Audio('multimedia/goalPostSound.mp3');
         this.sound = true;
         this.roundCounter = 0;
-        this.ongoing = false;
     }
     init = function () {
         this.roundCounter = 0;
@@ -51,8 +50,7 @@ class Game {
     }
 
     playGame = function () {
-        if (this.roundCounter < 5 && this.ongoing !== true) {
-            this.ongoing = true;
+        if (this.roundCounter < 5) {
             this.regularState();
             console.log("start");
             if (this.sound) this.referiSound.play();
@@ -98,12 +96,11 @@ class Game {
     blockStateNoBall = function () {
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
         this.fieldController.start();
-        this.goalKeeperController.start();
-        this.playerController.start();
+        this.goalKeeperController.blockStage();
+        this.playerController.blockStage();
     }
 
     kickStage = function () {
-        console.log(this.ballView.speedX, this.ballView.speedY);
         var self = this;
         self.kickStateNoBall();
         self.ballController.kick();
@@ -135,7 +132,6 @@ class Game {
     }
 
     stopGoalStage = function () {
-        this.ongoing = false;
         clearTimeout(this.goalTimeout);
         this.roundCounter += 1;
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
@@ -156,7 +152,6 @@ class Game {
         }, 2000);
     }
     stopBlockStage = function () {
-        this.ongoing = false;
         clearTimeout(this.blockTimeout);
         this.roundCounter += 1;
         this.ctx.clearRect(0, 0, this.container.width, this.container.height);
@@ -235,6 +230,10 @@ class Game {
                 else reject("вратарь не отбил");
             }, 550);
         });
+    }
+
+    updateScore = function () {
+
     }
 }
 var game = new Game();
