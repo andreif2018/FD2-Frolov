@@ -15,10 +15,13 @@ maximum-scale=1.0">
         <div class="grid-item Menu"><input type="button" id="sound" value="Mute" onclick="game.setMute()"/></div>
         <div class="grid-item Menu"><input type="button" value="Record Table" onclick="switchToRecordsTablePage()"/></div>
         <div class="grid-item Menu"><span>Score:</span></div>
-        <div class="grid-item Menu Score">
+        <div class="grid-item Menu Score" id="score">
             <span>Player&nbsp;</span><span id="playerScore"></span>
             <span>&colon;</span>
             <span id="computerScore"></span><span>&nbsp;Computer</span>
+        </div>
+        <div class="grid-item Menu Round">
+            <span>Round:</span><span id="round"></span>
         </div>
         <div class="grid-item Field">
             <div id="result" class="Shown"></div>
@@ -69,7 +72,6 @@ maximum-scale=1.0">
         }
         function switchToRulesPage() {
             switchToState( { pageName:'Rules' } );
-            game.popupInfo.setAttribute("display", "block");
         }
 
         function switchToMainPageAndStartGame() {
@@ -79,7 +81,6 @@ maximum-scale=1.0">
 
         function switchToRecordsTablePage() {
             switchToState( { pageName:'RecordTable' } );
-            game.popupInfo.popupInfo.className = "Shown";
         }
         switchToStateFromURLHash();
     </script>

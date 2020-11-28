@@ -37,13 +37,13 @@ class Game {
         this.roundCounter = 0;
         this.popupInfo = document.getElementById("result");
     }
+
     init = function () {
         this.roundCounter = 0;
         this.playGame();
         this.playerScore = 0;
         this.computerScore = 0;
         this.updateScore();
-        this.popupInfo.className = "NotShown";
         this.skewX = 0;
         this.skewY = 0;
     }
