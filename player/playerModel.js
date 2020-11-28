@@ -9,11 +9,14 @@ class PlayerModel {
         this.view.start();
         this.view.angle = 1;
         this.view.drawPlayer(false);
-        if (this.view.role !== "player") {
+        if (this.view.role === "player") {
+            this.view.speedX = 0.01;
+            this.view.speedY = 0.01;
+        }
+        else {
             var randomSpeed = this.getRandomSpeedDirection();
             this.view.speedX = randomSpeed[0];
-            this.view.speedY = randomSpeed[1];
-        }
+            this.view.speedY = randomSpeed[1];}
     }
 
     goalStage = function () {
@@ -37,11 +40,11 @@ class PlayerModel {
 
     getRandomSpeedDirection = function () { // возвращает случайную пару скоростей по X и Y
         var resultHash = {
-            0: [-3, 0.5/2],
-            1: [0, 0],
-            2: [3, 0],
-            3: [3, 0.5/2],
-        }
+                0: [-3, 0.5/2],
+                1: [0, 0],
+                2: [3, 0],
+                3: [3, 0.5/2],
+            }
         return resultHash[Math.floor(Math.random() * (3 + 1))];
     }
 }

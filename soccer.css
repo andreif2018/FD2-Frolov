@@ -39,6 +39,8 @@ input#sound {
 }
 div#result {
     position: absolute;
+    left: 30%;
+    top: 25%;
     width: 10em;
     height: 14vw;
     font-size: 2em;

@@ -7,6 +7,8 @@ class Game {
         this.goalTimeout = null;
         this.blockInterval = null;
         this.blockTimeout = null;
+        this.popupInterval = null;
+        this.popupTimeout = null;
         this.container = document.getElementById("container");
         this.ctx = this.container.getContext('2d');
         this.fieldView = new FieldView(this.container);
@@ -42,6 +44,8 @@ class Game {
         this.computerScore = 0;
         this.updateScore();
         this.resultPopup.className = "NotShown";
+        this.skewX = 0;
+        this.skewY = 0;
     }
 
     setMute = function () {
@@ -56,7 +60,9 @@ class Game {
     }
 
     playGame = function () {
-        if (this.roundCounter < 5) {
+        clearTimeout(this.popupTimeout);
+        this.resultPopup.className = "NotShown";
+        if (this.roundCounter < 1) {
             this.regularState();
             if (this.sound) this.referiSound.play();
             document.addEventListener('keydown', (event) => {
@@ -249,12 +255,35 @@ class Game {
         document.getElementById("computerScore").textContent = this.computerScore;
     }
 
+    updatePosAndSkew = function () {
+        this.skewX += 0.5;
+        this.skewY += 0.001;
+        if (this.skewX === 180 || this.skewY === 180) {
+            this.skewX = 0;
+            this.skewY = 0;
+            this.resultPopup.style.transform = "skew(" + this.skewX + "deg, " + this.skewY + "deg)";
+            return;
+        }
+        this.resultPopup.style.transform = "skew(" + this.skewX + "deg, " + this.skewY + "deg)";
+        var self = this;
+        this.popupInterval = requestAnimationFrame( () => {
+            self.updatePosAndSkew();
+        });
+        this.popupTimeout = setTimeout(() => {cancelAnimationFrame(this.popupInterval);}, 7000);
+    }
+
     updateResult = function () {
         this.finishSound.play();
         setTimeout(() =>{this.finishSound.pause();}, 2000);
-        if (this.playerScore > this.computerScore) this.resultPopup.innerText = "Game Over \n You won";
+        if (this.playerScore > this.computerScore) this.resultPopup.innerText = "Congratulations \n You won!!!";
         else this.resultPopup.innerText = "Game Over \n Computer won";
         this.resultPopup.className = "Shown";
+        var self = this;
+        self.updatePosAndSkew();
+        setTimeout(() => {
+            clearTimeout(this.popupTimeout);
+            this.resultPopup.style.transform = "skew(0deg, 0deg)";
+        }, 7000);
     }
 }
 var game = new Game();
