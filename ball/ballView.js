@@ -31,7 +31,7 @@ class BallView {
         this.ballY = 580*this.zoom; // 11 метровая отметка по y
         this.ballRadius = 18*this.zoom;
         this.speedX = 0;
-        this.speedY = -12*this.zoom;// 12- нижний угол, -14 верхний
+        this.speedY = -14*this.zoom;// 12- нижний угол, -14 верхний
     }
 
     drawBall = function (x = this.ballX, y = this.ballY) {

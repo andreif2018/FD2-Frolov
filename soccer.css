@@ -3,14 +3,14 @@ body {
 }
 .grid-container {
     display: grid;
-    grid-template-columns: 10% 15% 10% 20% 10% 25% 10%;
+    grid-template-columns: 10% 10% 10% 10% 10% 35% 15%;
     padding: 10px;
     font: 33px 'Marcellus SC', serif;
     outline: slategray;
 }
 .grid-item {
     padding: 20px;
-    align-self: auto;
+    align-self: stretch;
 }
 .Menu {
     background-color: gray;
@@ -18,13 +18,18 @@ body {
 }
 .Field {
     background-color: seagreen;
+    background-image: url("multimedia/logo.png");
+    background-repeat: no-repeat;
+    background-position: right top;
     grid-row: 2;
     grid-column: 1/8;
     height: auto;
+    padding-top: 10px;
 }
 input[type="button"] {
     background-color: dimgray;
     font: 30px 'Marcellus SC', serif;
+    margin-right: 10px;
 }
 .Score {
     white-space: nowrap;
@@ -50,6 +55,7 @@ div#result {
     text-align: center;
     text-shadow: darkslategray 1px 02px 12px;
     white-space: pre-line;
+    padding-bottom: 20px;
 }
 div.Shown {
     display: block;

@@ -202,8 +202,8 @@ class Game {
             setTimeout( () => {
                 if (self.isInTarget() && !self.isGoalKeeperBlock() ) {
                     if (self.sound) {
-                        self.gridSound.play();
                         self.goalSound.play();
+                        self.gridSound.play();
                         setTimeout(() =>{self.goalSound.pause();}, 4000);
                     }
                     self.goalStage();
@@ -276,11 +276,24 @@ class Game {
         this.popupTimeout = setTimeout(() => {cancelAnimationFrame(this.popupInterval);}, 7000);
     }
 
+    save = function () {
+
+    }
+
     updateResult = function () {
         this.finishSound.play();
         setTimeout(() =>{this.finishSound.pause();}, 2000);
-        if (this.playerScore > this.computerScore) this.popupInfo.innerText = "Congratulations \n You won!!!";
-        else this.popupInfo.innerText = "Game Over \n Computer won";
+        var popupHTML = "";
+        if (this.playerScore > this.computerScore) {
+            popupHTML += "<p>Congratulations \n You won!!!</p>";
+            popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
+            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
+        }
+        else {
+            popupHTML += "<p>Game Over \n Computer won</p>";
+            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
+        }
+        this.popupInfo.innerHTML = popupHTML;
         this.popupInfo.className = "Shown";
         var self = this;
         self.updatePosAndSkew();
