@@ -4,7 +4,7 @@ class PlayerView {
     constructor(container, role) {
         this.container = container;
         this.ctx = this.container.getContext('2d');
-        this.zoom = 1; // для +/- разрешения экрана
+        this.zoom = this.getZoom(); // для +/- разрешения экрана
         this.targetLineY = 200*this.zoom; // линия ворот с началом у левого края видимой части поля
         this.role = role;
         if (this.role === "player") this.multiplier = 1.7;  //170% масштаб фигуры игрока тк он расположен ближе к пользователю
@@ -27,6 +27,17 @@ class PlayerView {
         this.shake = 0.75*this.zoom; // для анимации движения футболки у игрока во время гола
         this.isKick = null;
         this.shapeColor = "navajowhite";
+    }
+
+    getZoom = function () {
+        var zoom;
+        if (window.innerWidth < 760) zoom = 0.3;
+        else if (window.innerWidth < 960) zoom = 0.5;
+        else if (window.innerWidth < 1400) zoom = 0.75;
+        else zoom = 1;
+        console.log(zoom);
+        console.log(window.innerWidth);
+        return zoom;
     }
 
     start = function () {
@@ -316,6 +327,7 @@ class PlayerView {
     }
 
     drawPlayer = function (goal) {
+        this.zoom = this.getZoom()
         if (goal) {
             if (this.role === "player") {
                 this.shake = -this.shake;

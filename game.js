@@ -368,4 +368,5 @@ class Game {
         }
     }
 }
+
 var game = new Game();

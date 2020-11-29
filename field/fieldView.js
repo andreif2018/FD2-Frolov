@@ -4,7 +4,7 @@ class FieldView {
     constructor(container) {
         this.container = container;
         this.ctx = this.container.getContext('2d');
-        this.zoom = 1; // для +/- разрешения экрана, 1 = 100% по умолчанию
+        this.zoom = this.getZoom(); // для +/- разрешения экрана, 1 = 100% по умолчанию
         this.targetLineStartX = 0; // линия ворот с началом у левого края поля
         this.targetLineY = 200*this.zoom; // линия ворот с началом у левого края видимой части поля
         this.targetX = 500*this.zoom; // левая стойка ворот по X
@@ -26,6 +26,17 @@ class FieldView {
         this.penaltyPointY = 600*this.zoom; // 11 метровая отметка по y
         this.penaltyPointRadiusX = 10*this.zoom;
         this.penaltyPointRadiusY = 5*this.zoom;
+    }
+
+    getZoom = function () {
+        var zoom;
+        if (window.innerWidth < 760) zoom = 0.3;
+        else if (window.innerWidth < 960) zoom = 0.5;
+        else if (window.innerWidth < 1400) zoom = 0.75;
+        else zoom = 1;
+        console.log(zoom);
+        console.log(window.innerWidth);
+        return zoom;
     }
 
     drawFieldEdge = function () { // разметка поля
@@ -166,6 +177,7 @@ class FieldView {
     }
 
     drawField = function () {
+        this.zoom = this.getZoom();
         var self = this;
         self.drawFieldEdge();
         self.drawGoalKeeperArea();

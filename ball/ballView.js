@@ -5,7 +5,7 @@ class BallView {
     constructor(container) {
         this.container = container;
         this.ctx = this.container.getContext('2d');
-        this.zoom = 1; // для +/- разрешения экрана
+        this.zoom = this.getZoom();
         this.targetX = 500*this.zoom; // левая стойка ворот по X
         this.targetLineY = 200*this.zoom; // линия ворот с началом у левого края видимой части поля
         this.targetLength = 600*this.zoom; // длина ворот
@@ -21,7 +21,19 @@ class BallView {
         this.elastK = 0.8; // при отталкивании во сколько раз теряется скорост 0.8
     }
 
+    getZoom = function () {
+        var zoom;
+        if (window.innerWidth < 760) zoom = 0.3;
+        else if (window.innerWidth < 960) zoom = 0.5;
+        else if (window.innerWidth < 1400) zoom = 0.75;
+        else zoom = 1;
+        console.log(zoom);
+        console.log(window.innerWidth);
+        return zoom;
+    }
+
     start = function () {
+        this.zoom = this.getZoom(); // для +/- разрешения экрана
         this.ballX = 800*this.zoom; // 11 метровая отметка по x;
         this.ballY = 580*this.zoom; // 11 метровая отметка по y
         this.ballRadius = 18*this.zoom;
