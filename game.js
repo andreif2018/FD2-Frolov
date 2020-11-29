@@ -62,7 +62,7 @@ class Game {
         var self = this;
         clearTimeout(this.popupTimeout);
         this.popupInfo.className = "NotShown";
-        if (this.roundCounter < 5) { // игра в пять раундов
+        if (this.roundCounter < 1) { // игра в пять раундов
             this.updateRound();
             this.regularState();
             if (this.sound) this.referiSound.play();
@@ -278,17 +278,9 @@ class Game {
 
     updateResult = function () {
         this.finishSound.play();
-        setTimeout(() =>{this.finishSound.pause();}, 2000);
         var popupHTML = "";
-        if (this.playerScore > this.computerScore) {
-            popupHTML += "<p>Congratulations \n You won!!!</p>";
-            popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
-            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
-        }
-        else {
-            popupHTML += "<p>Game Over \n Computer won</p>";
-            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
-        }
+        if (this.playerScore > this.computerScore) popupHTML += "<p>Congratulations \n You won!!!</p>";
+        else popupHTML += "<p>Game Over \n Computer won</p>";
         this.popupInfo.innerHTML = popupHTML;
         this.popupInfo.className = "Shown";
         var self = this;
@@ -296,6 +288,14 @@ class Game {
         setTimeout(() => {
             clearTimeout(this.popupTimeout);
             this.popupInfo.style.transform = "skew(0deg, 0deg)";
+            if (this.playerScore > this.computerScore) {
+                popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
+                popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
+            }
+            else {
+                popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
+            }
+            this.popupInfo.innerHTML = popupHTML;
         }, 7000);
     }
 }
