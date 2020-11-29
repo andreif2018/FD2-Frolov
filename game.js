@@ -35,6 +35,8 @@ class Game {
         this.finishSound = new Audio('multimedia/finishSound.mp3');
         this.sound = true;
         this.popupInfo = document.getElementById("result");
+        this.remoteStorage = new AJAXStorage();
+        this.locStorage = new LocStorage(this.remoteStorage);
     }
 
     init = function () {
@@ -252,7 +254,7 @@ class Game {
     }
 
     updateRound = function () {
-        document.getElementById("round").textContent = this.roundCounter + 1 + "/5";
+        document.getElementById("round").textContent = this.roundCounter + 1 + "of 5";
     }
 
     updateSkew = function () {
@@ -273,7 +275,14 @@ class Game {
     }
 
     save = function () {
-
+        var firstName;
+        do {
+            firstName = prompt("Please, enter your first name");
+        } while (firstName == null || firstName.length === 0 );
+        var result = firstName + " " + this.playerScore + "-" + this.computerScore + " " +"Computer";
+        this.popupInfo.innerText = result;
+        this.locStorage.addValue(result);
+        return result;
     }
 
     updateResult = function () {
@@ -288,18 +297,18 @@ class Game {
         setTimeout(() => {
             clearTimeout(this.popupTimeout);
             this.popupInfo.style.transform = "skew(0deg, 0deg)";
-            if (this.playerScore > this.computerScore) {
-                popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
-                popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
-            }
-            else {
-                popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
-            }
+            popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
+            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
             this.popupInfo.innerHTML = popupHTML;
         }, 7000);
     }
+
+    showRecords = function () {
+        var arrayOfRecords = this.locStorage.getValue();
+        this.popupInfo.innerText = "Latest 5 games";
+        for (var item = 0; item < 5; item++) {
+            this.popupInfo.innerText += "\n"+ arrayOfRecords[item];
+        }
+    }
 }
 var game = new Game();
-
-
-

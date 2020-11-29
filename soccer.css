@@ -44,9 +44,9 @@ input#sound {
 }
 div#result {
     position: absolute;
-    left: 30%;
+    left: 25%;
     top: 25%;
-    width: 30%;
+    width: 50%;
     height: auto;
     font-size: 2em;
     border: 4px solid yellowgreen;
@@ -62,7 +62,4 @@ div.Shown {
 }
 div.NotShown {
     display: none;
-}
-#result p {
-    font-size: 0.75em;
 }

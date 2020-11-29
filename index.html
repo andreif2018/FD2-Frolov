@@ -17,7 +17,7 @@ maximum-scale=1.0">
         <div class="grid-item Menu"><span>Score:</span></div>
         <div class="grid-item Menu Score" id="score">
             <span>Player&nbsp;</span><span id="playerScore"></span>
-            <span>&colon;</span>
+            <span>&mdash;</span>
             <span id="computerScore"></span><span>&nbsp;Computer</span>
         </div>
         <div class="grid-item Menu Round">
@@ -38,6 +38,9 @@ maximum-scale=1.0">
     <script src="ball/ballView.js"></script>
     <script src="ball/ballModel.js"></script>
     <script src="ball/ballController.js"></script>
+    <script src="AJAXStorage.js"></script>
+    <script src="LocStorage.js"></script>
+    <script src='http://fe.it-academy.by/JQ/jquery.js'></script>
     <script src="game.js"></script>
     <script>
         "use strict";
@@ -62,7 +65,7 @@ maximum-scale=1.0">
                     popupHTML +="<p>Just 5 rounds</p>";
                     break;
                 case 'Records':
-                    popupHTML +="<p>qwe</p>";
+                    popupHTML +="<input type='button' value='Load Latest 5 Records' id='showRecords' onclick='game.showRecords()'>"
                     break;
             }
             document.getElementById('result').innerHTML = popupHTML;
