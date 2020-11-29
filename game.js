@@ -72,7 +72,7 @@ class Game {
         var self = this;
         clearTimeout(this.popupTimeout);
         this.popupInfo.className = "NotShown";
-        if (this.roundCounter < 1) { // игра в пять раундов
+        if (this.roundCounter < 5) { // игра в пять раундов
             this.updateRound();
             this.regularState();
             if (this.sound) this.referiSound.play();
@@ -368,5 +368,5 @@ class Game {
         }
     }
 }
-
 var game = new Game();
+

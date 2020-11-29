@@ -34,8 +34,6 @@ class FieldView {
         else if (window.innerWidth < 960) zoom = 0.5;
         else if (window.innerWidth < 1400) zoom = 0.75;
         else zoom = 1;
-        console.log(zoom);
-        console.log(window.innerWidth);
         return zoom;
     }
 
