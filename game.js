@@ -59,6 +59,7 @@ class Game {
     }
 
     playGame = function () {
+        var self = this;
         clearTimeout(this.popupTimeout);
         this.popupInfo.className = "NotShown";
         if (this.roundCounter < 5) { // игра в пять раундов
@@ -70,20 +71,18 @@ class Game {
                     this.kickStage();
                     if (this.sound) this.ballKickSound.play();
                     this.IsGoalPromise("проверка гола","гол!!!")
-                        .then( result => {console.log("получен результат " + result);}
-                        )
-                        .catch( error => {console.log(error);}
-                        );
-                    this.IsGoalPostPromise("попал ли в штангу/перекладину","штанга/перекладина")
-                        .then( result => {console.log("получен результат " + result);}
-                        )
-                        .catch( error => {console.log( error);}
-                        );
-                    this.IsGoalKeeperBlockPromise("отбил ли вратарь","вратарь отбил")
-                        .then( result => {console.log("получен результат " + result);}
-                        )
-                        .catch( error => {console.log( error);}
-                        );
+                        .then( result => {console.log("получен результат " + result);})
+                        .catch( error => {
+                            console.log(error);
+                            self.IsGoalPostPromise("попал ли в штангу/перекладину","штанга/перекладина")
+                                .then( result => {console.log("получен результат " + result);})
+                                .catch( error => {
+                                    console.log( error);
+                                    self.IsGoalKeeperBlockPromise("отбил ли вратарь","вратарь отбил")
+                                        .then( result => {console.log("получен результат " + result);})
+                                        .catch( error => {console.log( error);});
+                                    });
+                        });
                 }
             }, {once: true});
         }
@@ -211,7 +210,7 @@ class Game {
                     resolve(result);
                 }
                 else reject("нет гола");
-            }, 550);
+            }, 555);
         });
     }
     IsGoalPostPromise = function (name, result) {
@@ -227,7 +226,7 @@ class Game {
                     resolve(result);
                 }
                 else reject("не попал в штангу");
-            }, 550);
+            }, 0);
         });
     }
     IsGoalKeeperBlockPromise = function (name, result) {
@@ -243,7 +242,7 @@ class Game {
                     resolve(result);
                 }
                 else reject("вратарь не отбил");
-            }, 550);
+            }, 0);
         });
     }
 
