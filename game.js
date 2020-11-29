@@ -39,16 +39,31 @@ class Game {
         this.locStorage = new LocStorage(this.remoteStorage);
         this.posX = 0;
         this.posY = 0;
+        this.ongoing = false;
+    }
+
+    disableRulesAndRecordsButtons = function () {
+        document.getElementById("rules").disabled = true;
+        document.getElementById("records").disabled = true;
+    }
+
+    enableRulesAndRecordsButtons = function () {
+        document.getElementById("rules").disabled = false;
+        document.getElementById("records").disabled = false;
     }
 
     init = function () {
         this.roundCounter = 0;
-        this.playGame();
         this.playerScore = 0;
         this.computerScore = 0;
         this.updateScore();
         this.skewX = 0;
         this.skewY = 0;
+    }
+
+    start = function () {
+        this.init()
+        this.playGame();
     }
 
     setMute = function () {
@@ -63,6 +78,8 @@ class Game {
     }
 
     playGame = function () {
+        this.ongoing = true;
+        this.disableRulesAndRecordsButtons();
         var self = this;
         clearTimeout(this.popupTimeout);
         this.popupInfo.className = "NotShown";
@@ -297,11 +314,13 @@ class Game {
         var self = this;
         self.updateSkew();
         setTimeout(() => {
-            clearTimeout(this.popupTimeout);
-            this.popupInfo.style.transform = "skew(0deg, 0deg)";
+            clearTimeout(self.popupTimeout);
+            self.popupInfo.style.transform = "skew(0deg, 0deg)";
             popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
             popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
-            this.popupInfo.innerHTML = popupHTML;
+            self.popupInfo.innerHTML = popupHTML;
+            this.ongoing = false;
+            self.enableRulesAndRecordsButtons();
         }, 7000);
     }
 
@@ -317,7 +336,7 @@ class Game {
         this.popupInterval = requestAnimationFrame( () => {
             self.updateTranslate();
         });
-        this.popupTimeout = setTimeout(() => {cancelAnimationFrame(this.popupInterval);}, 7000);
+        this.popupTimeout = setTimeout(() => {cancelAnimationFrame(self.popupInterval);}, 7000);
     }
 
     showRecords = function () {
@@ -351,6 +370,15 @@ class Game {
                 }
             }
         }, 7000);
+    }
+
+    askAboutTermination = function() {
+        if (this.ongoing) var isConfirmed = confirm("Do you want to leave the game?");
+        console.log(isConfirmed);
+        if (isConfirmed) {
+            document.location.reload();
+            this.init();
+        }
     }
 }
 var game = new Game();

@@ -10,10 +10,10 @@ maximum-scale=1.0">
 </head>
 <body>
     <div class="grid-container">
-        <div class="grid-item Menu"><input type="button" value="Rules" onclick="switchToRulesPage()"/></div>
+        <div class="grid-item Menu"><input type="button" value="Rules" id="rules" onclick="switchToRulesPage()"/></div>
         <div class="grid-item Menu"><input type="button" value="Main" onclick="switchToMainPageAndStartGame()"/></div>
         <div class="grid-item Menu"><input type="button" id="sound" value="Mute" onclick="game.setMute()"/></div>
-        <div class="grid-item Menu"><input type="button" value="Records" onclick="switchToRecordsPage()"/></div>
+        <div class="grid-item Menu"><input type="button" value="Records" id="records" onclick="switchToRecordsPage()"/></div>
         <div class="grid-item Menu"><span>Score:</span></div>
         <div class="grid-item Menu Score" id="score">
             <span>Player&nbsp;</span><span id="playerScore"></span>
@@ -61,7 +61,7 @@ maximum-scale=1.0">
             switch ( SPAState.pageName ) {
                 case 'Main':
                     popupHTML +="<p>Welcome to myBall</p>";
-                    popupHTML +="<input type='button' value='New Game' id='newGame' onclick='game.init()'>"
+                    popupHTML +="<input type='button' value='New Game' id='newGame' onclick='game.start()'>"
                     break;
                 case 'Rules':
                     popupHTML +="<p>Press shift key to kick ball</p>";
@@ -83,6 +83,7 @@ maximum-scale=1.0">
         }
 
         function switchToMainPageAndStartGame() {
+            game.askAboutTermination();
             switchToState( { pageName:'Main' } );
         }
 
