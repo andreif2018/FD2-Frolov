@@ -37,6 +37,8 @@ class Game {
         this.popupInfo = document.getElementById("result");
         this.remoteStorage = new AJAXStorage();
         this.locStorage = new LocStorage(this.remoteStorage);
+        this.posX = 0;
+        this.posY = 0;
     }
 
     init = function () {
@@ -303,12 +305,52 @@ class Game {
         }, 7000);
     }
 
+    updateTranslate = function () {
+        this.posX += 1;
+        this.posY += 1;
+        if (this.posX === 400 || this.skewY === 400) {
+            this.popupInfo.style.transform = "translate(0px, 0px)";
+            return;
+        }
+        this.popupInfo.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        var self = this;
+        this.popupInterval = requestAnimationFrame( () => {
+            self.updateTranslate();
+        });
+        this.popupTimeout = setTimeout(() => {cancelAnimationFrame(this.popupInterval);}, 7000);
+    }
+
     showRecords = function () {
+        var bound;
         var arrayOfRecords = this.locStorage.getValue();
         this.popupInfo.innerText = "Latest 5 games";
-        for (var item = 0; item < 5; item++) {
-            this.popupInfo.innerText += "\n"+ arrayOfRecords[item];
+        if (arrayOfRecords.length === 0) this.popupInfo.innerText += "\n No available data yet";
+        else {
+            if (arrayOfRecords.length > 5) {
+                bound = 5;
+                for (var item = 0; item < bound; item++) this.popupInfo.innerText += "\n"+ arrayOfRecords[item];
+            }
+            else for (var item = 0; item < arrayOfRecords.length; item++) {
+                this.popupInfo.innerText += "\n"+ arrayOfRecords[item];
+            }
+
         }
+        this.updateTranslate();
+        setTimeout(() => {
+            clearTimeout(this.popupTimeout);
+            this.popupInfo.style.transform = "translate(0px, 0px)";
+            this.popupInfo.innerText = "Latest 5 games";
+            if (arrayOfRecords.length === 0) this.popupInfo.innerText += "\n No available data yet";
+            else {
+                if (arrayOfRecords.length > 5) {
+                    bound = 5;
+                    for (var item = 0; item < bound; item++) this.popupInfo.innerText += "\n"+ arrayOfRecords[item];
+                }
+                else for (var item = 0; item < arrayOfRecords.length; item++) {
+                    this.popupInfo.innerText += "\n"+ arrayOfRecords[item];
+                }
+            }
+        }, 7000);
     }
 }
 var game = new Game();
