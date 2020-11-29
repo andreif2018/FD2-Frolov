@@ -362,7 +362,6 @@ class Game {
 
     askAboutTermination = function() {
         if (this.ongoing) var isConfirmed = confirm("Do you want to leave the game?");
-        console.log(isConfirmed);
         if (isConfirmed) {
             document.location.reload();
             this.init();

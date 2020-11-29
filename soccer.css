@@ -1,61 +1,17 @@
 body {
     overflow-x: hidden;
 }
-.grid-container {
-    display: grid;
-    grid-template-columns: 10% 10% 10% 10% 10% 35% 15%;
-    padding: 10px;
-    font: 33px 'Marcellus SC', serif;
-    outline: slategray;
-}
-.grid-item {
-    padding: 20px;
-    align-self: stretch;
-}
-.Menu {
-    background-color: gray;
-    grid-row: 1;
-}
-.Field {
-    background-color: seagreen;
-    background-image: url("multimedia/logo.png");
-    background-repeat: no-repeat;
-    background-position: right top;
-    grid-row: 2;
-    grid-column: 1/8;
-    height: auto;
-    padding-top: 10px;
-}
-input[type="button"] {
-    background-color: dimgray;
-    font: 30px 'Marcellus SC', serif;
-    margin-right: 10px;
-}
 .Score {
     white-space: nowrap;
 }
-
-input[type="button"]:focus {
-    outline: none;
-}
-
 input#sound {
     width: 4em;
 }
-div#result {
-    position: absolute;
-    left: 25%;
-    top: 25%;
-    width: 50%;
-    height: auto;
-    font-size: 2em;
-    border: 4px solid yellowgreen;
-    border-radius: 20%;
-    color: floralwhite;
-    text-align: center;
-    text-shadow: darkslategray 1px 02px 12px;
-    white-space: pre-line;
-    padding-bottom: 20px;
+input#showRecords {
+    margin-top: 10px;
+}
+input[type="button"]:focus {
+    outline: none;
 }
 div.Shown {
     display: block;
@@ -63,9 +19,252 @@ div.Shown {
 div.NotShown {
     display: none;
 }
-div#IProgress {
-    border: solid red 1px; width: 200px;
+div.Menu {
+    height: 50px
 }
-div#IProgressPerc {
-    background-color: red; height: 20px; width: 0%
+@media only screen and (min-width: 1400px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 12% 12% 12% 12% 12% 20% 20%;
+        padding: 10px;
+        font: 35px 'Marcellus SC', serif;
+        outline: slategray;
+    }
+    .grid-item {
+        padding: 10px;
+        align-self: flex-start;
+    }
+    .Menu {
+        background-color: gray;
+        grid-row: 1;
+    }
+    .Field {
+        background-color: seagreen;
+        background-image: url("multimedia/logo.png");
+        background-repeat: no-repeat;
+        background-position: right top;
+        grid-row: 2;
+        grid-column: 1/8;
+        height: auto;
+        padding-top: 10px;
+    }
+    input[type="button"] {
+        background-color: dimgray;
+        font: 35px 'Marcellus SC', serif;
+        margin-right: 5px;
+    }
+    span {
+        font-size: 25px;
+    }
+    div#IProgress {
+        border: solid red 1px; width: 200px;
+    }
+    div#IProgressPerc {
+        background-color: red; height: 20px; width: 0%
+    }
+    div#result {
+        position: absolute;
+        left: 25%;
+        top: 25%;
+        width: 50%;
+        height: auto;
+        font-size: 35px;
+        border: 4px solid yellowgreen;
+        border-radius: 20%;
+        color: floralwhite;
+        text-align: center;
+        text-shadow: darkslategray 1px 02px 12px;
+        white-space: pre-line;
+        padding-bottom: 20px;
+    }
+    /*:root {*/
+    /*    --gridTemplateColumnDesktop: 1fr 3fr 3fr 3fr 1fr;*/
+    /*    --gridTemplateRowDesktop: 300px 300px 300px;*/
+    /*    --gridColumnCell_1: 2; --gridRowCell_1: 1; !*cell with div id="c1"*!*/
+    /*}*/
+}
+@media only screen and (min-width: 200px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 12% 12% 12% 12% 12% 20% 20%;
+        padding: 7px;
+        font: 30px 'Marcellus SC', serif;
+        outline: slategray;
+    }
+    .grid-item {
+        padding: 7px;
+        align-self: flex-start;
+    }
+    .Menu {
+        background-color: gray;
+        grid-row: 1;
+    }
+    .Field {
+        background-color: seagreen;
+        background-image: url("multimedia/logo.png");
+        background-repeat: no-repeat;
+        background-position: right top;
+        grid-row: 2;
+        grid-column: 1/8;
+        height: auto;
+        padding-top: 7px;
+    }
+    input[type="button"] {
+        background-color: dimgray;
+        font: 30px 'Marcellus SC', serif;
+        margin-right: 4px;
+    }
+    span {
+        font-size: 20px;
+    }
+    div#IProgress {
+        border: solid red 1px; width: 200px;
+    }
+    div#IProgressPerc {
+        background-color: red; height: 20px; width: 0%
+    }
+    div#result {
+        position: absolute;
+        left: 25%;
+        top: 25%;
+        width: 50%;
+        height: auto;
+        font-size: 30px;
+        border: 3px solid yellowgreen;
+        border-radius: 20%;
+        color: floralwhite;
+        text-align: center;
+        text-shadow: darkslategray 1px 02px 12px;
+        white-space: pre-line;
+        padding-bottom: 25px;
+    }
+    /*:root {*/
+    /*    --gridTemplateColumnDesktop: 1fr 3fr 3fr 3fr 1fr;*/
+    /*    --gridTemplateRowDesktop: 300px 300px 300px;*/
+    /*    --gridColumnCell_1: 2; --gridRowCell_1: 1; !*cell with div id="c1"*!*/
+    /*}*/
+}
+@media only screen and (max-width: 960px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 12% 12% 12% 12% 12% 20% 20%;
+        padding: 5px;
+        font: 25px 'Marcellus SC', serif;
+        outline: slategray;
+    }
+    .grid-item {
+        padding: 5px;
+        align-self: flex-start;
+    }
+    .Menu {
+        background-color: gray;
+        grid-row: 1;
+    }
+    .Field {
+        background-color: seagreen;
+        background-image: url("multimedia/logo.png");
+        background-repeat: no-repeat;
+        background-position: right top;
+        grid-row: 2;
+        grid-column: 1/8;
+        height: auto;
+        padding-top: 5px;
+    }
+    input[type="button"] {
+        background-color: dimgray;
+        font: 20px 'Marcellus SC', serif;
+        margin-right: 3px;
+    }
+    span {
+        font-size: 15px;
+    }
+    div#IProgress {
+        border: solid red 1px; width: 200px;
+    }
+    div#IProgressPerc {
+        background-color: red; height: 20px; width: 0%
+    }
+    div#result {
+        position: absolute;
+        left: 25%;
+        top: 25%;
+        width: 50%;
+        height: auto;
+        font-size: 25px;
+        border: 3px solid yellowgreen;
+        border-radius: 20%;
+        color: floralwhite;
+        text-align: center;
+        text-shadow: darkslategray 1px 02px 12px;
+        white-space: pre-line;
+        padding-bottom: 20px;
+    }
+    /*:root {*/
+    /*    --gridTemplateColumnDesktop: 1fr 3fr 3fr 3fr 1fr;*/
+    /*    --gridTemplateRowDesktop: 300px 300px 300px;*/
+    /*    --gridColumnCell_1: 2; --gridRowCell_1: 1; !*cell with div id="c1"*!*/
+    /*}*/
+
+}
+@media only screen and (max-width: 760px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 12% 12% 12% 12% 12% 20% 20%;
+        padding: 3px;
+        font: 20px 'Marcellus SC', serif;
+        outline: slategray;
+    }
+    .grid-item {
+        padding: 3px;
+        align-self: flex-start;
+    }
+    .Menu {
+        background-color: gray;
+        grid-row: 1;
+    }
+    .Field {
+        background-color: seagreen;
+        background-image: url("multimedia/logo.png");
+        background-repeat: no-repeat;
+        background-position: right top;
+        grid-row: 2;
+        grid-column: 1/8;
+        height: auto;
+        padding-top: 3px;
+    }
+    input[type="button"] {
+        background-color: dimgray;
+        font: 15px 'Marcellus SC', serif;
+        margin-right: 2px;
+    }
+    span {
+        font-size: 10px;
+    }
+    div#IProgress {
+        border: solid red 1px; width: 200px;
+    }
+    div#IProgressPerc {
+        background-color: red; height: 20px; width: 0%
+    }
+    div#result {
+        position: absolute;
+        left: 25%;
+        top: 25%;
+        width: 50%;
+        height: auto;
+        font-size: 20px;
+        border: 2px solid yellowgreen;
+        border-radius: 20%;
+        color: floralwhite;
+        text-align: center;
+        text-shadow: darkslategray 1px 02px 12px;
+        white-space: pre-line;
+        padding-bottom: 15px;
+    }
+    /*:root {*/
+    /*    --gridTemplateColumnDesktop: 1fr 3fr 3fr 3fr 1fr;*/
+    /*    --gridTemplateRowDesktop: 300px 300px 300px;*/
+    /*    --gridColumnCell_1: 2; --gridRowCell_1: 1; !*cell with div id="c1"*!*/
+    /*}*/
+
 }
