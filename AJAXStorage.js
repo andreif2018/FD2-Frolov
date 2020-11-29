@@ -10,16 +10,6 @@ class AJAXStorage {
         this.callresult = null;
     }
 
-    initStorage = function() {
-        var self = this;
-        $.ajax( {
-                url : this.ajaxHandlerScript, type : 'POST', cache : false, dataType:'json',
-                data : { f : 'INSERT', n : this.stringName, v : JSON.stringify(this.dataToStore) },
-                success : () => {self.restoreInfo()}, error : () => {self.errorHandler()}
-            }
-        );
-    }
-
     storeInfo = function(value) {
         this.dataToStore = value;
         this.updatePassword = Math.random();

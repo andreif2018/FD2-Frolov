@@ -308,7 +308,7 @@ class Game {
     updateTranslate = function () {
         this.posX += 1;
         this.posY += 1;
-        if (this.posX === 400 || this.skewY === 400) {
+        if (this.posX === 200 || this.skewY === 200) {
             this.popupInfo.style.transform = "translate(0px, 0px)";
             return;
         }

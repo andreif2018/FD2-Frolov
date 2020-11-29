@@ -63,3 +63,9 @@ div.Shown {
 div.NotShown {
     display: none;
 }
+div#IProgress {
+    border: solid red 1px; width: 200px;
+}
+div#IProgressPerc {
+    background-color: red; height: 20px; width: 0%
+}
