@@ -40,8 +40,8 @@ class PlayerView {
 
     start = function () {
         if (this.role === "player") {
-            this.bootX = 800*this.zoom + this.zoom*2 - 2*this.bodyWidth;//центр ворот
-            this.bootY = 475*this.zoom + this.legHeight + this.bodyHeight;
+            this.bootX = 865*this.zoom + this.zoom*2 - 2*this.bodyWidth;//центр ворот
+            this.bootY = 420*this.zoom + this.legHeight + this.bodyHeight;
         }
         else {
             this.bootX = 800*this.zoom - this.bodyWidth/2 + this.zoom*2;//центр ворот
