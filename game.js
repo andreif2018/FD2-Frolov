@@ -42,16 +42,6 @@ class Game {
         this.ongoing = false;
     }
 
-    disableRulesAndRecordsButtons = function () {
-        document.getElementById("rules").disabled = true;
-        document.getElementById("records").disabled = true;
-    }
-
-    enableRulesAndRecordsButtons = function () {
-        document.getElementById("rules").disabled = false;
-        document.getElementById("records").disabled = false;
-    }
-
     init = function () {
         this.roundCounter = 0;
         this.playerScore = 0;
@@ -79,7 +69,6 @@ class Game {
 
     playGame = function () {
         this.ongoing = true;
-        this.disableRulesAndRecordsButtons();
         var self = this;
         clearTimeout(this.popupTimeout);
         this.popupInfo.className = "NotShown";
@@ -317,10 +306,9 @@ class Game {
             clearTimeout(self.popupTimeout);
             self.popupInfo.style.transform = "skew(0deg, 0deg)";
             popupHTML  += "<input type='button' value='Save result' id='save' onclick='game.save()'>";
-            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.init()'>";
+            popupHTML += "<input type='button' value='New Game' id='newGame' onclick='game.start()'>";
             self.popupInfo.innerHTML = popupHTML;
             this.ongoing = false;
-            self.enableRulesAndRecordsButtons();
         }, 7000);
     }
 

@@ -79,6 +79,7 @@ maximum-scale=1.0">
             location.hash=encodeURIComponent(JSON.stringify(newState));
         }
         function switchToRulesPage() {
+            game.askAboutTermination();
             switchToState( { pageName:'Rules' } );
         }
 
@@ -88,6 +89,7 @@ maximum-scale=1.0">
         }
 
         function switchToRecordsPage() {
+            game.askAboutTermination();
             switchToState( { pageName:'Records' } );
         }
         switchToStateFromURLHash();
