@@ -26,6 +26,7 @@ class PlayerView {
         this.handWidth = 14 *this.zoom * this.multiplier;
         this.shake = 0.75*this.zoom; // для анимации движения футболки у игрока во время гола
         this.isKick = null;
+        this.shapeColor = "navajowhite";
     }
 
     start = function () {
@@ -59,9 +60,17 @@ class PlayerView {
 
     drawHead = function () {
         this.ctx.beginPath();
+        this.ctx.arc(this.headX, this.headY, this.headWidth/2, 0, 2 * Math.PI);
+        this.ctx.fillStyle = this.shapeColor;
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.arc(this.headX, this.headY+this.headWidth/2, this.headWidth/4, 0, 2 * Math.PI);
+        this.ctx.fillStyle = this.shapeColor;
+        this.ctx.fill();
+        this.ctx.beginPath();
         this.ctx.moveTo(this.headX, this.headY);
         this.ctx.lineTo(this.headX, this.headY);
-        this.ctx.strokeStyle = 'navajowhite'; //цвет лица
+        this.ctx.strokeStyle = this.shapeColor; //цвет лица
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = this.headWidth;
         this.ctx.stroke();
@@ -102,8 +111,8 @@ class PlayerView {
     drawNeck = function () {
         this.ctx.beginPath();
         this.ctx.moveTo(this.neckX, this.neckY);
-        this.ctx.lineTo(this.neckX, this.neckY + this.neckHeight);
-        this.ctx.strokeStyle = 'navajowhite';
+        this.ctx.lineTo(this.neckX, this.neckY);
+        this.ctx.strokeStyle = this.shapeColor;
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = this.neckWidth;
         this.ctx.stroke();
@@ -114,7 +123,7 @@ class PlayerView {
         else color = "yellow";
         this.drawRoundedRect(this.bodyX, this.bodyY, this.bodyWidth, this.bodyHeight, 10*this.zoom, color); //10-radius закругления плечей
         var gradient = this.ctx.createRadialGradient( // закраска футболки градиентом
-            this.bodyX+20*this.multiplier, this.bodyY+20*this.multiplier, 5*this.multiplier*this.zoom, // 5 - радиус внутрееннго круга
+            this.bodyX + 20*this.multiplier*this.zoom, this.bodyY + 20*this.multiplier*this.zoom, 5*this.multiplier*this.zoom, // 5 - радиус внутрееннго круга
             this.bodyX, this.bodyY, 10*this.multiplier*this.zoom); // 10-радиус внешнего круга
         if (this.role === "player") {
             gradient.addColorStop(0.75, '#0E82E1');// цвет узора на футболке
@@ -148,7 +157,7 @@ class PlayerView {
             this.ctx.moveTo(this.leftArmX - this.armWidth/8, this.armY + handsUp*1.1*this.armLength);// левая рука, armWidth/8 сдвиг от плеча
             this.ctx.lineTo(this.leftArmX - this.armWidth/8, this.armY + handsUp*2.2*this.armLength); // 2*armLength - длина руки arm + hand
             this.ctx.lineWidth = this.armWidth*0.5;
-            this.ctx.strokeStyle = 'navajowhite';
+            this.ctx.strokeStyle = this.shapeColor;
             this.ctx.stroke();
             this.ctx.beginPath();
             this.ctx.moveTo(this.leftArmX + this.armWidth/8, this.armY + handsUp*this.armLength/3 + straightArm);
@@ -161,7 +170,7 @@ class PlayerView {
             this.ctx.moveTo(this.rightArmX, this.armY + handsUp*this.armLength/3);
             this.ctx.lineTo(this.rightArmX + this.armWidth/2, this.armY + handsUp*2.2*this.armLength);//armWidth/1.5 - рука под углом, 2*armLength - длина руки arm + hand
             this.ctx.lineWidth = this.armWidth*0.5;
-            this.ctx.strokeStyle = 'navajowhite';
+            this.ctx.strokeStyle = this.shapeColor;
             this.ctx.stroke();
             this.ctx.beginPath();
             this.ctx.moveTo(this.rightArmX - this.armWidth/8, this.armY + handsUp*this.armLength/3 + straightArm);
@@ -208,9 +217,7 @@ class PlayerView {
             this.ctx.lineTo(this.leftHandX,this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
 
             var linearGradient_1 = this.ctx.createLinearGradient(this.leftHandX,  // градиент перчатки
-                this.handY,
-                this.leftHandX,
-                this.handY - 5*this.zoom);
+                this.handY, this.leftHandX, this.handY - 5*this.zoom);
             linearGradient_1.addColorStop(0, 'white');
             linearGradient_1.addColorStop(0.1, 'lightgray');
             linearGradient_1.addColorStop(1, 'white');
@@ -220,9 +227,7 @@ class PlayerView {
             this.ctx.moveTo(this.rightHandX, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4));
             this.ctx.lineTo(this.rightHandX, this.armY - handsDown*this.armLength*Math.sin(Math.PI/4) - 5*this.zoom);
             var linearGradient_2 = this.ctx.createLinearGradient(this.rightHandX,  // градиент перчатки
-                this.handY,
-                this.rightHandX,
-                this.handY - 5*this.zoom);
+                this.handY, this.rightHandX, this.handY - 5*this.zoom);
             linearGradient_2.addColorStop(0, 'white');
             linearGradient_2.addColorStop(0.1, 'lightgray');
             linearGradient_2.addColorStop(1, 'white');
@@ -240,7 +245,7 @@ class PlayerView {
     }
 
     drawLegs = function () {
-        var color = "navajowhite";
+        var color = this.shapeColor;
         this.drawRoundedRect(this.legX, this.legY, this.legWidth, this.legHeight/2, 10*this.zoom, color);
         // 10-radius закругления
         this.drawRoundedRect(this.legX + this.legWidth + this.legGap, this.legY, this.legWidth, this.legHeight/2, 10*this.zoom, color);
@@ -293,7 +298,7 @@ class PlayerView {
         this.neckX = this.bootX - this.zoom*2 + this.bodyWidth/2;
         this.neckY = this.bootY - this.legHeight - this.bodyHeight - this.neckHeight;
         this.headX = this.bootX - this.zoom*2 + this.bodyWidth/2;
-        this.headY = this.neckY - this.headHeight;
+        this.headY = this.bootY - this.legHeight - this.bodyHeight - this.neckHeight - this.headHeight;
         this.boxerX = this.bootX - this.zoom*2;
         this.boxerY = this.bootY - this.legHeight - this.zoom*9;
         this.legX = this.bootX;
@@ -333,5 +338,4 @@ class PlayerView {
         this.drawNeck();
         this.drawHead();
     }
-
 }

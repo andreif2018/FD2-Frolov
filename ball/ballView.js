@@ -69,7 +69,7 @@ class BallView {
     }
 
     ballInTarget = function () {
-        this.ballRadius = 14;
+        this.ballRadius = 14*this.zoom;
         this.ballUpdateAfterKick(this.speedInTargetX, this.speedInTargetY);
         // вылетел ли мяч правее правой штанги
         if ( this.ballX + this.ballRadius >= this.rightPost - this.postWidth/2) {
