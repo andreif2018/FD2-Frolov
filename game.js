@@ -68,6 +68,7 @@ class Game {
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Shift') {
                     this.kickStage();
+                    if (this.sound) this.ballKickSound.play();
                     this.IsGoalPromise("проверка гола","гол!!!")
                         .then( result => {console.log("получен результат " + result);}
                         )
@@ -196,7 +197,6 @@ class Game {
 
     IsGoalPromise = function (name, result) {
         var self = this;
-        if (this.sound) this.ballKickSound.play();
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
@@ -204,7 +204,6 @@ class Game {
                     if (self.sound) {
                         self.goalSound.play();
                         self.gridSound.play();
-                        setTimeout(() =>{self.goalSound.pause();}, 4000);
                     }
                     self.goalStage();
                     self.playerScore += 1;
@@ -217,7 +216,6 @@ class Game {
     }
     IsGoalPostPromise = function (name, result) {
         var self = this;
-        if (this.sound) this.ballKickSound.play();
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
@@ -234,7 +232,6 @@ class Game {
     }
     IsGoalKeeperBlockPromise = function (name, result) {
         var self = this;
-        if (this.sound) this.ballKickSound.play();
         return new Promise( (resolve, reject) => {
             console.log("промис " + name + " создан, запущен...");
             setTimeout( () => {
@@ -259,7 +256,7 @@ class Game {
         document.getElementById("round").textContent = this.roundCounter + 1 + "/5";
     }
 
-    updatePosAndSkew = function () {
+    updateSkew = function () {
         this.skewX += 0.5;
         this.skewY += 0.001;
         if (this.skewX === 180 || this.skewY === 180) {
@@ -271,7 +268,7 @@ class Game {
         this.popupInfo.style.transform = "skew(" + this.skewX + "deg, " + this.skewY + "deg)";
         var self = this;
         this.popupInterval = requestAnimationFrame( () => {
-            self.updatePosAndSkew();
+            self.updateSkew();
         });
         this.popupTimeout = setTimeout(() => {cancelAnimationFrame(this.popupInterval);}, 7000);
     }
@@ -296,7 +293,7 @@ class Game {
         this.popupInfo.innerHTML = popupHTML;
         this.popupInfo.className = "Shown";
         var self = this;
-        self.updatePosAndSkew();
+        self.updateSkew();
         setTimeout(() => {
             clearTimeout(this.popupTimeout);
             this.popupInfo.style.transform = "skew(0deg, 0deg)";
